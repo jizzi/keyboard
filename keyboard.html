@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+table, td {
+  border-left: 7px solid LightGoldenRodYellow;
+  border-right: 7px solid LightGoldenRodYellow;
+  border-collapse: collapse;
+}
+td {
+  padding: 0px;
+  text-align: center;
+}
+textarea {
+  font-size: 24px;
+}
+
+</style>
+
+<script>
+
+	// for table_spans, 2 is an usual "square" key
+	// ~ 14 keys per row...
+	const table_spans = [	2,   2, 2, 2, 2, 2,  2, 2, 2, 2, 2,  2, 2,  4,  0,			// 14 keys, sum_spans = 30
+				3,   2, 2, 2, 2, 2,  2, 2, 2, 2, 2,  2, 2,  3,  0,			// 14 keys
+				4,   2, 2, 2, 2, 2,  2, 2, 2, 2, 2,  2, 2,  2,  0,			// 13 keys (Enter -> -1)
+				5,   2, 2, 2, 2, 2,  2, 2, 2, 2, 2,  2, 3,  0,				// 13 keys
+				1,   0  /*,								// 1 key, total of 55
+				1, 1, 1, 1,   1, 1, 1, 1, 0,
+				1, 1, 1, 1,   1, 1, 1, 1, 0,
+				1, 1, 1, 1,   1, 1, 1, 1, 0,
+				1, 1, 1, 1,   1, 1, 1, 1, 0	*/
+				
+  	  	];
+
+	const cell_widths = [];
+	var cell_height = 45, table_width = 800;   //1100 for IDs
+
+	const border_thickness = 7;
+	const color_keyboard = "LightGoldenRodYellow";
+	const color_right    = "#72e74b";
+	const color_wrong    = "#99e6ff";
+
+	const cursor_symbol  = "\u2026";			// horizontal ellipsis
+	var selection_start = 0;				// emulating textArea cursor handling...
+	var selection_end = 0;
+
+	var current_num = 0;
+	const num_bits = 8;
+	var current_bit = num_bits - 1;
+
+	var shift_isactive = 0;		
+
+	function shift_press()
+	{
+		shift_isactive = (shift_isactive + 1) % 3;
+		//  0 -- shift is not active, 
+		//  1 -- shift is active, 
+		//  2 -- CAPS LOCK
+	}
+	
+	function Kbd_Button(id1, id2, number, value1, value2, mask1, mask2, handler1, handler2) 
+	{
+	    // id2 -- alternative cell, for "Enter" button
+	    // value, mask, handler -> 2 for active "Shift"
+	    this.id1 = id1;
+	    this.id2 = id2;
+	    this.number = number;
+	    this.value1 = value1;
+	    this.value2 = value2;
+	    this.mask1 = mask1;
+	    this.mask2 = mask2;
+	    this.handler1 = handler1;
+	    this.handler2 = handler2;
+	}
+	  
+	var button_list;
+
+	function init_button_list_rus()
+	{
+	    button_list = [
+	    new Kbd_Button("Key_0_0" ,       null,  bin('00000000'), '\u0394', '\u0394',   "ESC",      "ESC", null, null),		// "Delta" sign
+	    new Kbd_Button("Key_0_1" ,       null,  bin('00000100'),  "1",  "@",        null,       null, null, null),
+	    new Kbd_Button("Key_0_2" ,       null,  bin('00001000'),  "2",  "!",        null,       null, null, null),
+	    new Kbd_Button("Key_0_3" ,       null,  bin('00001100'),  "3",  "?",        null,       null, null, null),
+	    new Kbd_Button("Key_0_4" ,       null,  bin('00110000'),  "4",  ";",        null,       null, null, null),
+	    new Kbd_Button("Key_0_5" ,       null,  bin('00110100'),  "5",  ":",        null,       null, null, null),
+	    new Kbd_Button("Key_0_6" ,       null,  bin('00111000'),  "6",  "%",        null,       null, null, null),			// early end, bit 6
+	    new Kbd_Button("Key_0_7" ,       null,  bin('11101000'),  "7",  "¹",        null,       null, null, null),
+	    new Kbd_Button("Key_0_8" ,       null,  bin('11101100'),  "8",  "~",        null,       null, null, null),
+	    new Kbd_Button("Key_0_9" ,       null,  bin('11100000'),  "9",  "(",        null,       null, null, null),
+	    new Kbd_Button("Key_0_10",       null,  bin('11100100'),  "0",  ")",        null,       null, null, null),
+	    new Kbd_Button("Key_0_11",       null,  bin('11000000'),  "-",  "+",        null,       null, null, null),
+	    new Kbd_Button("Key_0_12",       null,  bin('11000100'),  ",",  ".",        null,       null, null, null),
+	    new Kbd_Button("Key_0_13",       null,  bin('11001000'), null, null,      "BKSP",      "DEL", backspaceInTextarea, delInTextarea),			// early end, bit 6
+
+	    new Kbd_Button("Key_1_0" ,       null,  bin('00010000'), null, null,      "SAVE",       null, null, null),
+	    new Kbd_Button("Key_1_1" ,       null,  bin('00010100'),  "\u0439",  "\u0419",        null,       null, null, null),
+	    new Kbd_Button("Key_1_2" ,       null,  bin('00011000'),  "\u0446",  "\u0426",        null,       null, null, null),			// early end, bit 6
+	    new Kbd_Button("Key_1_3" ,       null,  bin('00101000'),  "\u0443",  "\u0423",        null,       null, null, null),
+	    new Kbd_Button("Key_1_4" ,       null,  bin('00101100'),  "\u043a",  "\u041a",        null,       null, null, null),
+	    new Kbd_Button("Key_1_5" ,       null,  bin('00100000'),  "\u0435",  "\u0415",        null,       null, null, null),
+	    new Kbd_Button("Key_1_6" ,       null,  bin('00100100'),  "\u043d",  "\u041d",        null,       null, null, null),
+	    new Kbd_Button("Key_1_7" ,       null,  bin('11110000'),  "\u0433",  "\u0413",        null,       null, null, null),
+	    new Kbd_Button("Key_1_8" ,       null,  bin('11110100'),  "\u0448",  "\u0428",        null,       null, null, null),
+	    new Kbd_Button("Key_1_9" ,       null,  bin('11111000'),  "\u0449",  "\u0429",        null,       null, null, null),			// early end, bit 6
+	    new Kbd_Button("Key_1_10",       null,  bin('11010000'),  "\u0437",  "\u0417",        null,       null, null, null),
+	    new Kbd_Button("Key_1_11",       null,  bin('11010100'),  "\u0445",  "\u0425",        null,       null, null, null),
+	    new Kbd_Button("Key_1_12",       null,  bin('11011100'),  "\u044a",  "\u042a",        null,       null, null, null),
+	    new Kbd_Button("Key_1_13", "Key_2_13",  bin('11011000'), '\r\n', '\r\n\r\n', "ENTER", "ENTER x2", null, null),
+	    
+	    new Kbd_Button("Key_2_0" ,       null,  bin('01011000'), null, null,        "ENG",      "ENG",  init_button_list_eng, init_button_list_eng),
+	    new Kbd_Button("Key_2_1" ,       null,  bin('01011100'),  "\u0444",  "\u0424",        null,       null, null, null),
+	    new Kbd_Button("Key_2_2" ,       null,  bin('01010000'),  "\u044b",  "\u042b",        null,       null, null, null),
+	    new Kbd_Button("Key_2_3" ,       null,  bin('01010100'),  "\u0432",  "\u0412",        null,       null, null, null),
+	    new Kbd_Button("Key_2_4" ,       null,  bin('01100000'),  "\u0430",  "\u0410",        null,       null, null, null),
+	    new Kbd_Button("Key_2_5" ,       null,  bin('01100100'),  "\u043f",  "\u041f",        null,       null, null, null),
+	    new Kbd_Button("Key_2_6" ,       null,  bin('01101000'),  "\u0440",  "\u0420",        null,       null, null, null),			// early end, bit 6
+	    new Kbd_Button("Key_2_7" ,       null,  bin('10010000'),  "\u043e",  "\u041e",        null,       null, null, null),
+	    new Kbd_Button("Key_2_8" ,       null,  bin('10010100'),  "\u043b",  "\u041b",        null,       null, null, null),
+	    new Kbd_Button("Key_2_9" ,       null,  bin('10011000'),  "\u0434",  "\u0414",        null,       null, null, null),			// early end, bit 6
+	    new Kbd_Button("Key_2_10",       null,  bin('10101000'),  "\u0436",  "\u0416",        null,       null, null, null),
+	    new Kbd_Button("Key_2_11",       null,  bin('10101100'),  "\u044d",  "\u042d",        null,       null, null, null),
+	    new Kbd_Button("Key_2_12",       null,  bin('10100100'),  "\"", "'",        null,       null, null, null),
+
+	    new Kbd_Button("Key_3_0" ,       null,  bin('01000000'), null, null,     "SHIFT","CAPS LOCK", shift_press, shift_press),	// early end, bit 6
+	    new Kbd_Button("Key_3_1" ,       null,  bin('01001000'),  "\u044f",  "\u042f",        null,       null, null, null),
+	    new Kbd_Button("Key_3_2" ,       null,  bin('01001100'),  "\u0447",  "\u0427",        null,       null, null, null),
+	    new Kbd_Button("Key_3_3" ,       null,  bin('01111000'),  "\u0441",  "\u0421",        null,       null, null, null),
+	    new Kbd_Button("Key_3_4" ,       null,  bin('01111100'),  "\u043c",  "\u041c",        null,       null, null, null),
+	    new Kbd_Button("Key_3_5" ,       null,  bin('01110000'),  "\u0438",  "\u0418",        null,       null, null, null),			// early end, bit 6
+	    new Kbd_Button("Key_3_6" ,       null,  bin('10001000'),  "\u0442",  "\u0422",        null,       null, null, null),
+	    new Kbd_Button("Key_3_7" ,       null,  bin('10001100'),  "\u044c",  "\u042c",        null,       null, null, null),
+	    new Kbd_Button("Key_3_8" ,       null,  bin('10000000'),  "\u0431",  "\u0411",        null,       null, null, null),
+	    new Kbd_Button("Key_3_9" ,       null,  bin('10000100'),  "\u044e",  "\u042e",        null,       null, null, null),
+	    new Kbd_Button("Key_3_10",       null,  bin('10110000'), null, null,    "\u2190",   "\u2193", moveCursorLeft, moveCursorDown),		// "left",     "down",
+	    new Kbd_Button("Key_3_11",       null,  bin('10110100'), null, null,    "\u2192",   "\u2191", moveCursorRight, moveCursorUp),		// "right",      "up",
+	    new Kbd_Button("Key_3_12",       null,  bin('10111000'), null, null,        null,       null, null, null),			// early end, bit 6
+    
+	    new Kbd_Button("Key_4_0" ,       null,  bin('10100000'),  " ", "      ", "SPACE", "SPACE x6", null, null)
+	    ];     
+	}
+
+
+	function init_button_list_eng()
+	{
+	    button_list = [
+	    new Kbd_Button("Key_0_0" ,       null,  bin('00000000'), '\u0394', '\u0394',   "ESC",      "ESC", null, null),		// "Delta" sign
+	    new Kbd_Button("Key_0_1" ,       null,  bin('00000100'),  "1",  "!",        null,       null, null, null),
+	    new Kbd_Button("Key_0_2" ,       null,  bin('00001000'),  "2",  "@",        null,       null, null, null),
+	    new Kbd_Button("Key_0_3" ,       null,  bin('00001100'),  "3",  "#",        null,       null, null, null),
+	    new Kbd_Button("Key_0_4" ,       null,  bin('00110000'),  "4",  "$",        null,       null, null, null),
+	    new Kbd_Button("Key_0_5" ,       null,  bin('00110100'),  "5",  "%",        null,       null, null, null),
+	    new Kbd_Button("Key_0_6" ,       null,  bin('00111000'),  "6",  "^",        null,       null, null, null),			// early end, bit 6
+	    new Kbd_Button("Key_0_7" ,       null,  bin('11101000'),  "7",  "&",        null,       null, null, null),
+	    new Kbd_Button("Key_0_8" ,       null,  bin('11101100'),  "8",  "*",        null,       null, null, null),
+	    new Kbd_Button("Key_0_9" ,       null,  bin('11100000'),  "9",  "(",        null,       null, null, null),
+	    new Kbd_Button("Key_0_10",       null,  bin('11100100'),  "0",  ")",        null,       null, null, null),
+	    new Kbd_Button("Key_0_11",       null,  bin('11000000'),  "-",  "_",        null,       null, null, null),
+	    new Kbd_Button("Key_0_12",       null,  bin('11000100'),  "=",  "+",        null,       null, null, null),
+	    new Kbd_Button("Key_0_13",       null,  bin('11001000'), null, null,      "BKSP",      "DEL", backspaceInTextarea, delInTextarea),			// early end, bit 6
+
+	    new Kbd_Button("Key_1_0" ,       null,  bin('00010000'), null, null,      "SAVE",       null, null, null),
+	    new Kbd_Button("Key_1_1" ,       null,  bin('00010100'),  "q",  "Q",        null,       null, null, null),
+	    new Kbd_Button("Key_1_2" ,       null,  bin('00011000'),  "w",  "W",        null,       null, null, null),			// early end, bit 6
+	    new Kbd_Button("Key_1_3" ,       null,  bin('00101000'),  "e",  "E",        null,       null, null, null),
+	    new Kbd_Button("Key_1_4" ,       null,  bin('00101100'),  "r",  "R",        null,       null, null, null),
+	    new Kbd_Button("Key_1_5" ,       null,  bin('00100000'),  "t",  "T",        null,       null, null, null),
+	    new Kbd_Button("Key_1_6" ,       null,  bin('00100100'),  "y",  "Y",        null,       null, null, null),
+	    new Kbd_Button("Key_1_7" ,       null,  bin('11110000'),  "u",  "U",        null,       null, null, null),
+	    new Kbd_Button("Key_1_8" ,       null,  bin('11110100'),  "i",  "I",        null,       null, null, null),
+	    new Kbd_Button("Key_1_9" ,       null,  bin('11111000'),  "o",  "O",        null,       null, null, null),			// early end, bit 6
+	    new Kbd_Button("Key_1_10",       null,  bin('11010000'),  "p",  "P",        null,       null, null, null),
+	    new Kbd_Button("Key_1_11",       null,  bin('11010100'),  "[",  "{",        null,       null, null, null),
+	    new Kbd_Button("Key_1_12",       null,  bin('11011100'),  "]",  "}",        null,       null, null, null),
+	    new Kbd_Button("Key_1_13", "Key_2_13",  bin('11011000'), '\r\n', '\r\n\r\n', "ENTER", "ENTER x2", null, null),
+	    
+	    new Kbd_Button("Key_2_0" ,       null,  bin('01011000'), null, null,        "RUS",      "RUS",  init_button_list_rus, init_button_list_rus),
+	    new Kbd_Button("Key_2_1" ,       null,  bin('01011100'),  "a",  "A",        null,       null, null, null),
+	    new Kbd_Button("Key_2_2" ,       null,  bin('01010000'),  "s",  "S",        null,       null, null, null),
+	    new Kbd_Button("Key_2_3" ,       null,  bin('01010100'),  "d",  "D",        null,       null, null, null),
+	    new Kbd_Button("Key_2_4" ,       null,  bin('01100000'),  "f",  "F",        null,       null, null, null),
+	    new Kbd_Button("Key_2_5" ,       null,  bin('01100100'),  "g",  "G",        null,       null, null, null),
+	    new Kbd_Button("Key_2_6" ,       null,  bin('01101000'),  "h",  "H",        null,       null, null, null),			// early end, bit 6
+	    new Kbd_Button("Key_2_7" ,       null,  bin('10010000'),  "j",  "J",        null,       null, null, null),
+	    new Kbd_Button("Key_2_8" ,       null,  bin('10010100'),  "k",  "K",        null,       null, null, null),
+	    new Kbd_Button("Key_2_9" ,       null,  bin('10011000'),  "l",  "L",        null,       null, null, null),			// early end, bit 6
+	    new Kbd_Button("Key_2_10",       null,  bin('10101000'),  ";",  ":",        null,       null, null, null),
+	    new Kbd_Button("Key_2_11",       null,  bin('10101100'),  "\"", "'",        null,       null, null, null),
+	    new Kbd_Button("Key_2_12",       null,  bin('10100100'),  "/", "\\",        null,       null, null, null),
+
+	    new Kbd_Button("Key_3_0" ,       null,  bin('01000000'), null, null,     "SHIFT","CAPS LOCK", shift_press, shift_press),	// early end, bit 6
+	    new Kbd_Button("Key_3_1" ,       null,  bin('01001000'),  "z",  "Z",        null,       null, null, null),
+	    new Kbd_Button("Key_3_2" ,       null,  bin('01001100'),  "x",  "X",        null,       null, null, null),
+	    new Kbd_Button("Key_3_3" ,       null,  bin('01111000'),  "c",  "C",        null,       null, null, null),
+	    new Kbd_Button("Key_3_4" ,       null,  bin('01111100'),  "v",  "V",        null,       null, null, null),
+	    new Kbd_Button("Key_3_5" ,       null,  bin('01110000'),  "b",  "B",        null,       null, null, null),			// early end, bit 6
+	    new Kbd_Button("Key_3_6" ,       null,  bin('10001000'),  "n",  "N",        null,       null, null, null),
+	    new Kbd_Button("Key_3_7" ,       null,  bin('10001100'),  "m",  "M",        null,       null, null, null),
+	    new Kbd_Button("Key_3_8" ,       null,  bin('10000000'),  ",",  "<",        null,       null, null, null),
+	    new Kbd_Button("Key_3_9" ,       null,  bin('10000100'),  ".",  ">",        null,       null, null, null),
+	    new Kbd_Button("Key_3_10",       null,  bin('10110000'), null, null,    "\u2190",   "\u2193", moveCursorLeft, moveCursorDown),		// "left",     "down",
+	    new Kbd_Button("Key_3_11",       null,  bin('10110100'), null, null,    "\u2192",   "\u2191", moveCursorRight, moveCursorUp),		// "right",      "up",
+	    new Kbd_Button("Key_3_12",       null,  bin('10111000'), null, null,        null,       null, null, null),			// early end, bit 6
+    
+	    new Kbd_Button("Key_4_0" ,       null,  bin('10100000'),  " ", "      ", "SPACE", "SPACE x6", null, null)
+	    ];     
+	}
+
+
+/*
+//	    new Kbd_Button("Key_0_13",       null,  bin('11001000'), null, null,      "BKSP",      "DEL", backspaceInTextarea, delInTextarea),			// early end, bit 6
+
+
+	    new Kbd_Button("Key_0_6" ,       null,  bin('00111000'),  "6",  "%",        null,       null, null, null),			// early end, bit 6
+	    new Kbd_Button("Key_1_2" ,       null,  bin('00011000'),  "ö",  "Ö",        null,       null, null, null),			// early end, bit 6
+	    new Kbd_Button("Key_1_9" ,       null,  bin('11111000'),  "ù",  "Ù",        null,       null, null, null),			// early end, bit 6
+	    new Kbd_Button("Key_2_6" ,       null,  bin('01101000'),  "ð",  "Ð",        null,       null, null, null),			// early end, bit 6
+
+	    new Kbd_Button("Key_2_9" ,       null,  bin('10011000'),  "ä",  "Ä",        null,       null, null, null),			// early end, bit 6
+	    new Kbd_Button("Key_3_0" ,       null,  bin('01000000'), null, null,     "SHIFT","CAPS LOCK", shift_press, shift_press),	// early end, bit 6
+	    new Kbd_Button("Key_3_5" ,       null,  bin('01110000'),  "è",  "È",        null,       null, null, null),			// early end, bit 6
+
+	    new Kbd_Button("Key_3_12",       null,  bin('10111000'), null, null,        null,       null, null, null),			// early end, bit 6
+*/
+
+
+
+
+
+
+
+	
+	function update_table(actually_update)
+	{
+		// if actually_update != 0, actually update the document
+	/*
+		var current_num = 0;
+		const num_bits = 8;
+		var current_bit = 7;
+		var shift_isactive = 0;
+	*/
+		var i;
+		var cell1, cell2;
+		var num_active_buttons = 0, last_active_button = -1;
+		var master_mask = (1 << num_bits) - (1 << (current_bit + 1));
+		var current_mask = 1 << current_bit;
+		var current_color;
+		var current_text_mask, current_text_value;
+		var cellText = null;
+
+
+		for (i = 0; i < button_list.length; i++)
+		{
+			cell1 = document.getElementById(button_list[i].id1);
+			cell2 = document.getElementById(button_list[i].id2);
+
+			if ( ((button_list[i].number ^ current_num) & master_mask) != 0 )
+			{
+				// inactive button
+				current_color = color_keyboard;
+			}
+			else
+			{
+				// interactive button
+				num_active_buttons ++;
+				last_active_button = i;
+				if (  ((button_list[i].number ^ current_num) & current_mask) == 0  )
+				{
+					// match
+					current_color = color_right;
+				}
+				else
+				{
+					// other choice
+					current_color = color_wrong;
+				}
+			}
+
+			if (actually_update != 0)
+			{
+				// update color
+				cell1.style.backgroundColor = current_color;
+				if (cell2 != null)
+				{
+					cell2.style.backgroundColor = current_color;
+					cell2.style.borderTop = border_thickness + "px solid " + current_color;		// to paint "Enter" button
+				}
+
+				// update text
+				if (shift_isactive == 0)
+				{
+					// SHIFT is inactive
+					current_text_mask  = button_list[i].mask1;
+					current_text_value = button_list[i].value1;
+				}
+				else
+				{
+					current_text_mask  = button_list[i].mask2;
+					current_text_value = button_list[i].value2;
+				}
+
+				cellText = null;
+				if (current_text_mask != null)
+				{
+				      	cellText = current_text_mask;
+				}
+				else if (current_text_value != null)
+				{
+				      	cellText = current_text_value;
+				}
+				else
+				{
+				      	cellText = "";
+				}
+
+				cell1.innerHTML = cellText;
+			}
+
+		}
+
+		if (num_active_buttons == 0)
+		{
+			alert('Error: num_active_buttons is zero!');
+		}
+		else if (num_active_buttons == 1)
+		{
+			return last_active_button;
+		}
+		else
+		{
+			return ( -num_active_buttons );
+		}
+	}
+
+	function change_choice()
+	{
+		current_num ^= (1 << current_bit);
+		update_table(1);
+	}
+
+	function undo_choice()
+	{
+		if (current_bit < num_bits - 1)
+		{
+			current_bit ++;
+		}
+		update_table(1);
+	}
+
+
+	function apply_choice()
+	{
+	/*
+		var current_num = 0;
+		const num_bits = 8;
+		var current_bit = 7;
+		var shift_isactive = 0;
+	*/
+		var current_handler, current_text;
+
+		var active_button = 0, old_shift_isactive;
+		if (current_bit <= 0)
+		{
+			alert('Error, current_bit == ' + current_bit);
+		}
+		else
+		{
+			current_bit --;
+
+			active_button = update_table(0); 	// just get the return value...
+
+			if (active_button >= 0)			// only one active button
+			{
+				// active_button is pressed!
+				old_shift_isactive = shift_isactive;
+				if (shift_isactive == 0)
+				{
+					current_handler = button_list[active_button].handler1;
+					current_text = button_list[active_button].value1;
+				}
+				else
+				{
+					// SHIFT was pressed!
+					current_handler = button_list[active_button].handler2;
+					current_text = button_list[active_button].value2;
+				}
+
+				if (current_handler != null)
+				{
+					// call that function...
+					current_handler();
+				}
+				else if (current_text != null)
+				{
+					typeInTextarea(current_text, document.getElementById("my_textarea"));
+				}
+
+				// if SHIFT was active, and was not repeatedly pressed, inactivate SHIFT
+				if (old_shift_isactive == 1 && shift_isactive < 2)
+				{
+					shift_isactive = 0;
+				}
+
+				current_num = 0;
+				current_bit = num_bits - 1;
+			}
+
+			update_table(1);		// redraw in any case...
+
+		}
+	}
+
+	// textArea related functions
+
+//	const cursor_symbol  = "\u2026";			// horizontal ellipsis
+
+	function removeCursor(el)
+	{
+		var start = selection_start;
+		var end = selection_end;
+
+		var text = el.value;
+		var cursor_position = -1;
+		var before, after;
+
+		while ( (cursor_position = text.indexOf(cursor_symbol) ) != -1 )
+		{
+			// cursor is found...
+			// remove cursor...
+			before = text.substring(0, cursor_position);
+			after = text.substring(cursor_position + 1, text.length);
+			text = before + after;
+
+			// shift selection if needed...
+			if (start > cursor_position)
+			{
+				start --;
+			}
+			if (end > cursor_position)
+			{
+				end --;
+			}
+		}
+
+		// update textArea value and selection...
+		el.value = text;
+
+		selection_start = start;
+		selection_end = end;
+
+	}
+
+	function addCursor(el)
+	{
+//		var start = selection_start;
+		var end = selection_end;
+		var text = el.value;
+		var before, after;
+
+		before = text.substring(0, end);
+		after = text.substring(end, text.length);
+
+		el.value = before + cursor_symbol + after;
+	}
+
+
+	function typeInTextarea(newText, el = document.activeElement) 
+	{
+		removeCursor(el);
+
+		var start = selection_start;
+		var end = selection_end;
+		const text = el.value;
+		const before = text.substring(0, start);
+		const after  = text.substring(end, text.length);
+		el.value = (before + newText + after);
+
+		selection_start = selection_end = start + newText.length;
+
+		addCursor(el);
+	}
+
+	function deletingInTextarea(el, num_backspace, num_del) 
+	{
+		removeCursor(el);
+
+		var start = selection_start;
+		var end = selection_end;
+		const text = el.value;
+		start -= num_backspace;
+		if (start < 0)
+		{
+			start = 0;
+		}
+		end += num_del;
+		if (end > text.length)
+		{
+			end = text.length;
+		}
+
+		const before = text.substring(0, start);
+		const after  = text.substring(end, text.length);
+		el.value = (before + after);
+
+		selection_start = selection_end = start;
+
+
+		addCursor(el);
+	}
+
+	function backspaceInTextarea() 
+	{
+		deletingInTextarea(document.getElementById("my_textarea"), 1, 0);
+	}
+
+	function delInTextarea() 
+	{
+		deletingInTextarea(document.getElementById("my_textarea"), 0, 1);
+	}
+
+
+	function moveCursor(el, direction)
+	{
+		removeCursor(el);
+
+		var start = selection_start;
+		var end = selection_end;
+		var text = el.value;
+
+		if (direction == "left")
+		{
+			start --;
+			if (start < 0)
+			{
+				start = 0;
+			}
+			end = start;
+		}
+		else if (direction == "right")
+		{
+			end ++;
+			if (end > text.length)
+			{
+				end = text.length;
+			}
+			start = end;
+		}
+		else if (direction == "up")
+		{
+			// move up
+			// TO DO
+		}
+		else if (direction == "down")
+		{
+			// move down
+			// TO DO
+		}
+		else
+		{
+			alert("Error in function 'moveCursor': direction = '" + direction + "'");
+		}
+
+
+		selection_start = start;
+		selection_end = end;
+
+		addCursor(el);
+	}
+
+	function moveCursorLeft()
+	{
+		moveCursor(document.getElementById("my_textarea"), "left");
+	}
+
+	function moveCursorRight()
+	{
+		moveCursor(document.getElementById("my_textarea"), "right");
+	}
+
+	function moveCursorUp()
+	{
+		moveCursor(document.getElementById("my_textarea"), "up");
+	}
+
+	function moveCursorDown()
+	{
+		moveCursor(document.getElementById("my_textarea"), "down");
+	}
+	
+
+
+
+	// other functions
+	
+	function bin(str)
+	{
+		return(parseInt(str, 2));
+	}
+
+	function process_cell_widths()
+	{
+		// aligning right edges of table rows, adjusting the rightmost cell width
+		var i, j, sum_spans, sum_keys, sum_width, table_row_width;
+		const row_sum_spans = [], row_sum_keys = [];
+
+		// calculate span sums
+		j = 0;
+		sum_spans = 0;
+		sum_keys  = 0;
+		for (i = 0; i < table_spans.length; i++) 
+		{
+			if (table_spans[i] != 0)
+			{
+				sum_spans += table_spans[i];
+				sum_keys ++;
+			}
+			else
+			{
+				row_sum_spans[j] = sum_spans;
+				row_sum_keys[j] = sum_keys;
+				sum_spans = 0;
+				sum_keys = 0;
+				j++;
+			}
+		}
+
+		// calculate cell widths
+
+		j = 0;
+		sum_width = 0;
+		for (i = 0; i < table_spans.length; i++) 
+		{
+			table_row_width = table_width - (border_thickness) * (row_sum_keys[j] - 1);
+			if (table_spans[i] != 0)
+			{
+				cell_widths[i] = Math.floor(table_spans[i] * table_row_width / row_sum_spans[j]);
+				sum_width += cell_widths[i];
+			}
+			else
+			{
+				cell_widths[i]   = 0;
+				cell_widths[i-1] += table_row_width - sum_width;
+				sum_width = 0;
+				j++;
+			}
+		}
+	}
+
+
+	function generate_table() 
+	{
+		process_cell_widths();
+
+		// get the reference for the body
+		var body = document.getElementsByTagName("body")[0];
+	
+		// creates a <table> element and a <tbody> element
+		var tbl; 
+		var tblBody; 
+
+
+		// creating all cells
+		var i, row_num, col_num;
+		var row = document.createElement("tr");
+		tbl = document.createElement("table");
+		tblBody = document.createElement("tbody");
+
+		row_num = 0;
+		col_num = 0;
+
+		for (i = 0; i < table_spans.length; i++) 
+		{
+		    // creates a table row
+		    if (table_spans[i] == 0)
+		    {
+			    // add the row to the end of the table body
+			    tblBody.appendChild(row);
+			    // put the <tbody> in the <table>
+			    tbl.appendChild(tblBody);
+			    // appends <table> into <body>
+			    body.appendChild(tbl);
+
+			    row_num++;
+			    col_num = 0;
+
+			    if (i < table_spans.length - 1)
+			    {
+		 		    tbl = document.createElement("table");
+				    tblBody = document.createElement("tbody");
+
+				    row = document.createElement("tr");
+			    }
+			    else
+			    {
+				    tbl.style.borderBottom = border_thickness + "px solid " + color_keyboard; 
+			    }
+			    continue;
+		    }
+	
+		      var cell = document.createElement("td");
+		      var cell_id = "Key_"+ row_num +"_"+ col_num;
+
+		      
+
+		      cell.style.borderTop = border_thickness + "px solid " + color_keyboard;
+		      
+
+
+		      cell.setAttribute("width", cell_widths[i]  + "px");
+		      cell.setAttribute("height", cell_height);
+
+
+		      /*		      
+		      if (row_num == 0)
+		      {	
+		      	var cellText = document.createTextNode(".");
+		      }
+		      else
+		      {
+		      	var cellText = document.createTextNode("W");
+		      }
+		      cell.appendChild(cellText);
+		      */
+
+//		      var cellText = document.createTextNode(cell_widths[i]);
+//		      var cellText = document.createTextNode(cell_id);
+
+
+
+	              cell.setAttribute("id", cell_id);
+
+
+		      row.appendChild(cell);
+
+		      col_num++;
+		    
+
+		}
+
+	}
+
+
+	function myFunctionOnLoad() 
+	{
+		selection_start = 0;
+		selection_end = 0;
+
+		init_button_list_rus();
+		generate_table();
+//		alert(update_table(0));
+		update_table(1);
+
+		addCursor( document.getElementById("my_textarea") );
+	}
+
+	function process_keydown(event)
+	{
+		if (event.keyCode == 32 || event.keyCode == 13) 		// space (32) or enter (13)
+		{
+			apply_choice();
+		}
+		else if ( event.keyCode >= 37 && event.keyCode <= 40 )		// any arrow: left arrow (37), up arrow (38), right arrow (39) or down arrow(40)
+		{
+			change_choice();
+		}
+		else if (event.keyCode == 8)					// backspace
+		{
+			undo_choice();
+		}
+	}
+
+	window.onload = myFunctionOnLoad;
+	document.addEventListener("keydown", process_keydown);
+
+
+
+</script>
+
+</head>
+<body style="background-color:#a0a0a0;">
+
+<textarea rows = "7" cols = "60" name = "typed_text" id = "my_textarea" readonly >
+</textarea>
+<p>
+
+</body>
+</html>
+
