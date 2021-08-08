@@ -11,14 +11,25 @@ td {
   padding: 0px;
   text-align: center;
 }
-textarea {
+
+div {
   font-size: 24px;
+  background-color: white; 
+  width: 800px;
+  height: 224px;
+  line-height: 32px;
+  overflow-y: auto;
 }
 
 </style>
 
 <script>
 
+//	?
+//	overflow-x: visible;
+//	overflow-wrap: break-word;
+
+	// approximate settings for table cell widths
 	// for table_spans, 2 is an usual "square" key
 	// ~ 14 keys per row...
 	const table_spans = [	2,   2, 2, 2, 2, 2,  2, 2, 2, 2, 2,  2, 2,  4,  0,			// 14 keys, sum_spans = 30
@@ -33,22 +44,49 @@ textarea {
 				
   	  	];
 
+	// precise values for table cell widths, in px
 	const cell_widths = [];
 	var cell_height = 45, table_width = 800;   //1100 for IDs
 
+	// line height in div
+	const line_height = 32;
+	// number of text lines in div
+	const n_lines_in_div = 7;
+	// thickness of the border in the table
 	const border_thickness = 7;
+	// keyboard background color
 	const color_keyboard = "LightGoldenRodYellow";
+	// background color of the "right" choice
 	const color_right    = "#72e74b";
+	// background color of the "wrong" choice
 	const color_wrong    = "#99e6ff";
 
+	// symbol used to define cursor
 	const cursor_symbol  = "\u2026";			// horizontal ellipsis
-	var selection_start = 0;				// emulating textArea cursor handling...
+	// start/end of the selection in internal representation of the text
+	var selection_start = 0;				// handling cursor...
 	var selection_end = 0;
+	// internal representation of the typed text
+	var typed_text = "";					// text typed by the user
+	// positions of '\n' symbols in 'typed_text'
+	const enter_positions = [];
+	// length of each line in symbols
+	const line_lengths = [];
+	// current line, in units of px, shown at the top of the div
+	var current_scroll_top = 0;
+	// top offsets of all lines within div, relative to the div top
+	const line_offsetTop = [];
+	// top offset of the cursor relative to the div top
+	var cursor_offsetTop = 0;
 
+	// current number in the algorithm of search
 	var current_num = 0;
+	// max number of choices
 	const num_bits = 8;
+	// start position of the choice selector
 	var current_bit = num_bits - 1;
 
+	// whether "SHIFT" key has been pressed
 	var shift_isactive = 0;		
 
 	function shift_press()
@@ -107,7 +145,7 @@ textarea {
 	    new Kbd_Button("Key_1_10",       null,  bin('11010000'),  "\u0437",  "\u0417",        null,       null, null, null),
 	    new Kbd_Button("Key_1_11",       null,  bin('11010100'),  "\u0445",  "\u0425",        null,       null, null, null),
 	    new Kbd_Button("Key_1_12",       null,  bin('11011100'),  "\u044a",  "\u042a",        null,       null, null, null),
-	    new Kbd_Button("Key_1_13", "Key_2_13",  bin('11011000'), '\r\n', '\r\n\r\n', "ENTER", "ENTER x2", null, null),
+	    new Kbd_Button("Key_1_13", "Key_2_13",  bin('11011000'),  '\n',      '\n\n', "ENTER", "ENTER x2", null, null),
 	    
 	    new Kbd_Button("Key_2_0" ,       null,  bin('01011000'), null, null,        "ENG",      "ENG",  init_button_list_eng, init_button_list_eng),
 	    new Kbd_Button("Key_2_1" ,       null,  bin('01011100'),  "\u0444",  "\u0424",        null,       null, null, null),
@@ -173,7 +211,7 @@ textarea {
 	    new Kbd_Button("Key_1_10",       null,  bin('11010000'),  "p",  "P",        null,       null, null, null),
 	    new Kbd_Button("Key_1_11",       null,  bin('11010100'),  "[",  "{",        null,       null, null, null),
 	    new Kbd_Button("Key_1_12",       null,  bin('11011100'),  "]",  "}",        null,       null, null, null),
-	    new Kbd_Button("Key_1_13", "Key_2_13",  bin('11011000'), '\r\n', '\r\n\r\n', "ENTER", "ENTER x2", null, null),
+	    new Kbd_Button("Key_1_13", "Key_2_13",  bin('11011000'), '\n', '\n\n', "ENTER", "ENTER x2", null, null),
 	    
 	    new Kbd_Button("Key_2_0" ,       null,  bin('01011000'), null, null,        "RUS",      "RUS",  init_button_list_rus, init_button_list_rus),
 	    new Kbd_Button("Key_2_1" ,       null,  bin('01011100'),  "a",  "A",        null,       null, null, null),
@@ -393,7 +431,7 @@ textarea {
 				}
 				else if (current_text != null)
 				{
-					typeInTextarea(current_text, document.getElementById("my_textarea"));
+					typeInTextarea(current_text, document.getElementById("my_text_field"));
 				}
 
 				// if SHIFT was active, and was not repeatedly pressed, inactivate SHIFT
@@ -415,118 +453,72 @@ textarea {
 
 //	const cursor_symbol  = "\u2026";			// horizontal ellipsis
 
-	function removeCursor(el)
-	{
-		var start = selection_start;
-		var end = selection_end;
-
-		var text = el.value;
-		var cursor_position = -1;
-		var before, after;
-
-		while ( (cursor_position = text.indexOf(cursor_symbol) ) != -1 )
-		{
-			// cursor is found...
-			// remove cursor...
-			before = text.substring(0, cursor_position);
-			after = text.substring(cursor_position + 1, text.length);
-			text = before + after;
-
-			// shift selection if needed...
-			if (start > cursor_position)
-			{
-				start --;
-			}
-			if (end > cursor_position)
-			{
-				end --;
-			}
-		}
-
-		// update textArea value and selection...
-		el.value = text;
-
-		selection_start = start;
-		selection_end = end;
-
-	}
-
-	function addCursor(el)
-	{
-//		var start = selection_start;
-		var end = selection_end;
-		var text = el.value;
-		var before, after;
-
-		before = text.substring(0, end);
-		after = text.substring(end, text.length);
-
-		el.value = before + cursor_symbol + after;
-	}
-
-
 	function typeInTextarea(newText, el = document.activeElement) 
 	{
-		removeCursor(el);
-
 		var start = selection_start;
 		var end = selection_end;
-		const text = el.value;
-		const before = text.substring(0, start);
-		const after  = text.substring(end, text.length);
-		el.value = (before + newText + after);
+		const before = typed_text.substring(0, start);
+		const after  = typed_text.substring(end, typed_text.length);
+		typed_text = (before + newText + after);
 
 		selection_start = selection_end = start + newText.length;
 
-		addCursor(el);
+		renderTextToInnerHTML();
 	}
 
 	function deletingInTextarea(el, num_backspace, num_del) 
 	{
-		removeCursor(el);
-
 		var start = selection_start;
 		var end = selection_end;
-		const text = el.value;
 		start -= num_backspace;
 		if (start < 0)
 		{
 			start = 0;
 		}
 		end += num_del;
-		if (end > text.length)
+		if (end > typed_text.length)
 		{
-			end = text.length;
+			end = typed_text.length;
 		}
 
-		const before = text.substring(0, start);
-		const after  = text.substring(end, text.length);
-		el.value = (before + after);
+		const before = typed_text.substring(0, start);
+		const after  = typed_text.substring(end, typed_text.length);
+		typed_text = (before + after);
 
 		selection_start = selection_end = start;
 
 
-		addCursor(el);
+		renderTextToInnerHTML();
 	}
 
 	function backspaceInTextarea() 
 	{
-		deletingInTextarea(document.getElementById("my_textarea"), 1, 0);
+		deletingInTextarea(document.getElementById("my_text_field"), 1, 0);
 	}
 
 	function delInTextarea() 
 	{
-		deletingInTextarea(document.getElementById("my_textarea"), 0, 1);
+		deletingInTextarea(document.getElementById("my_text_field"), 0, 1);
 	}
 
 
 	function moveCursor(el, direction)
 	{
-		removeCursor(el);
-
 		var start = selection_start;
 		var end = selection_end;
-		var text = el.value;
+		var pos;
+
+//		const enter_positions = [];
+//		const line_lengths = [];
+		processEnterPositions();
+
+		// current position
+		var pos_line = 0, pos_column = 0;
+		// new position relative to the text
+		var new_pos = 0;
+
+		var i;
+
 
 		if (direction == "left")
 		{
@@ -540,21 +532,93 @@ textarea {
 		else if (direction == "right")
 		{
 			end ++;
-			if (end > text.length)
+			if (end > typed_text.length)
 			{
-				end = text.length;
+				end = typed_text.length;
 			}
 			start = end;
 		}
-		else if (direction == "up")
+		else if (direction == "up" || direction == "down")
 		{
+			if (direction == "up")
+			{
+				pos = start;
+			}
+			else
+			{
+				pos = end;
+			}
+
 			// move up
-			// TO DO
-		}
-		else if (direction == "down")
-		{
-			// move down
-			// TO DO
+			// figure out what is the current line and column of the cursor/selection
+			// assuming I'm on the first line...
+			pos_line = 0;
+			pos_column = pos;
+			// but possibly not.
+//			alert(enter_positions);
+//			alert(line_lengths);
+
+			for (i = 0; i < enter_positions.length; i++)
+			{
+				if (pos > enter_positions[i])
+				{
+					pos_line = i + 1;
+					pos_column = pos - enter_positions[i] - 1;
+				}
+				else
+				{
+					break;
+				}
+			}
+
+//			alert('pos = ' + pos + ', pos_line = ' + pos_line + ', pos_column = ' + pos_column);
+
+			if (direction == "up")
+			{
+				if (pos_line == 0)
+				{
+					new_pos = 0;
+				}
+				else
+				{
+					if (pos_line == 1)
+					{
+						new_pos = 0;
+					}
+					else
+					{
+						new_pos = enter_positions[pos_line - 2] + 1;
+					}
+
+					if (pos_column > line_lengths[pos_line - 1])
+					{
+						pos_column = line_lengths[pos_line - 1];
+					}
+
+					new_pos += pos_column;
+				}
+			}
+			else	// direction == "down"
+			{
+				if (pos_line == enter_positions.length)
+				{
+					// cursor on the last line
+					new_pos = typed_text.length;
+				}
+				else
+				{
+					if (pos_column > line_lengths[pos_line + 1])
+					{
+						pos_column = line_lengths[pos_line + 1];
+					}
+
+					new_pos = enter_positions[pos_line] + 1 + pos_column;
+				}
+			}
+
+
+			end = new_pos;
+			start = new_pos;
 		}
 		else
 		{
@@ -565,30 +629,163 @@ textarea {
 		selection_start = start;
 		selection_end = end;
 
-		addCursor(el);
+		renderTextToInnerHTML();
 	}
 
 	function moveCursorLeft()
 	{
-		moveCursor(document.getElementById("my_textarea"), "left");
+		moveCursor(document.getElementById("my_text_field"), "left");
 	}
 
 	function moveCursorRight()
 	{
-		moveCursor(document.getElementById("my_textarea"), "right");
+		moveCursor(document.getElementById("my_text_field"), "right");
 	}
 
 	function moveCursorUp()
 	{
-		moveCursor(document.getElementById("my_textarea"), "up");
+		moveCursor(document.getElementById("my_text_field"), "up");
 	}
 
 	function moveCursorDown()
 	{
-		moveCursor(document.getElementById("my_textarea"), "down");
+		moveCursor(document.getElementById("my_text_field"), "down");
 	}
+
 	
 
+	function processEnterPositions()
+	{
+		/*
+		const cursor_symbol  = "\u2026";			// horizontal ellipsis
+		var selection_start = 0;				// handling cursor...
+		var selection_end = 0;
+		var typed_text = "";					// text typed by the user
+		const enter_positions = [];
+		const line_lengths = [];
+		*/
+
+		enter_positions.length = 0;
+		line_lengths.length = 0;
+
+		var i, prev_break = 0;
+		for (i = 0; i < typed_text.length; i++)
+		{
+			if (typed_text.charAt(i) == '\n')
+			{
+				enter_positions.push(i);
+				line_lengths.push(i - prev_break);
+				prev_break = i + 1;
+			}
+		}
+
+		// at least 1 line always...
+		line_lengths.push(typed_text.length - prev_break);
+	}
+
+	// const line_offsetTop = [];
+	// var cursor_offsetTop = 0;
+
+	function obtainLineOffsetTop()
+	{
+		var nline;
+		var span;
+		line_offsetTop.length = 0;
+
+		nline = 0;
+
+		do
+		{
+			span = document.getElementById("span_line_" + nline);
+			
+			if (span != null)
+			{
+				line_offsetTop[nline] = span.offsetTop;
+				nline ++;
+			}
+		}
+		while(span != null);
+
+		span = document.getElementById("span_cursor");
+		if (span != null)
+		{
+			cursor_offsetTop = span.offsetTop;
+		}
+//		alert(line_offsetTop);
+	}
+
+
+	function renderTextToInnerHTML()
+	{
+		var i, nline;
+		var html_text = "";
+
+		// insert cursor after selection_end!
+		var typed_text_c = typed_text.substring(0, selection_end) + "<span id = \"span_cursor\">" +
+				   cursor_symbol + "</span>" + typed_text.substring(selection_end);
+
+		// render for internal HTML
+		nline = 0;
+		html_text += "<span id = \"span_line_"+ nline + "\">";
+
+		for (i = 0; i < typed_text_c.length; i++)
+		{
+			if (typed_text_c.charAt(i) == '\n')
+			{
+				html_text += "</span><br>";
+				nline ++;
+				html_text += "<span id = \"span_line_"+ nline + "\">";
+			}
+			else
+			{
+				html_text += typed_text_c.charAt(i);
+			}
+		}
+
+		html_text += "</span>";
+
+		
+		document.getElementById("my_text_field").innerHTML = html_text;
+
+//		obtainLineOffsetTop();
+		update_scroll();
+	}
+
+	function update_scroll()
+	{
+//		current_scroll_top = 0;
+//		var cursor_offsetTop = 0;
+//		const line_height = 32;
+//		const n_lines_in_div = 7;
+
+
+		obtainLineOffsetTop();
+
+		var current_cursor_vertical_position = (cursor_offsetTop - line_offsetTop[0]) - current_scroll_top;
+		// new scroll position
+		var new_offset = current_scroll_top;
+		// the last on-screen line
+		var max_offset = (n_lines_in_div - 1) * line_height;
+
+		if (current_cursor_vertical_position < 0)
+		{
+			new_offset = (cursor_offsetTop - line_offsetTop[0]);
+		}
+		else if (current_cursor_vertical_position > max_offset )
+		{
+			new_offset = (cursor_offsetTop - line_offsetTop[0]) - max_offset;
+		}
+
+
+		current_scroll_top = new_offset;
+		if (current_scroll_top < 0)
+		{
+			current_scroll_top = 0;
+		}
+
+
+		document.getElementById("my_text_field").scrollTop = current_scroll_top;
+	}
 
 
 	// other functions
@@ -745,13 +942,17 @@ textarea {
 	{
 		selection_start = 0;
 		selection_end = 0;
+		typed_text = "";
+		current_scroll_top = 0;
 
-		init_button_list_rus();
+//		init_button_list_rus();
+		init_button_list_eng();
 		generate_table();
 //		alert(update_table(0));
 		update_table(1);
 
-		addCursor( document.getElementById("my_textarea") );
+
+		renderTextToInnerHTML();
 	}
 
 	function process_keydown(event)
@@ -770,9 +971,9 @@ textarea {
 		}
 	}
 
+
 	window.onload = myFunctionOnLoad;
 	document.addEventListener("keydown", process_keydown);
-
 
 
 </script>
@@ -780,8 +981,8 @@ textarea {
 </head>
 <body style="background-color:#a0a0a0;">
 
-<textarea rows = "7" cols = "60" name = "typed_text" id = "my_textarea" readonly >
-</textarea>
+<div id="my_text_field" onscroll="update_scroll();">
+</div>
 <p>
 
 </body>
