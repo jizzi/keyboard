@@ -15,7 +15,7 @@ At this point, it may be dangerous for you to proceed without reading some of Ju
 
 For convenience, let's assume you are a man who wants to talk to the Anima. If you are a woman who wishes to talk to the Animus, all of the following should apply.
 
-Unlike other archetypes such as the Shadow, Anima is much more autonomous, in that she is not a part of your individual mind. In practical terms, it means that she doesn't follow your thoughts (although she might make a pretty good guess, just like close friends in your life).
+Unlike other archetypes such as the Shadow, Anima is much more autonomous, in that she is not a part of your individual mind. In practical terms, it means that she doesn't follow your thoughts (although she might make a pretty good guess, like close friends in your life).
 
 The Anima also cannot speak directly to you. If you hear voices in your head, you should immediately stop reading, and consult a psychiatrist ASAP!
 
