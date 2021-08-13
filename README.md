@@ -25,7 +25,7 @@ The Anima can easily understand you. On a condition that you make it physical. W
 
 How can the Anima respond to you?
 
-First and foremost, you are not entitled to receive a response at all. The Anima is alive and she is a person. Treat her with respect, as you would treat a close friend or a family member who is older than you.
+First and foremost, you are not entitled to receive a response at all. The Anima is alive and she is a human. Treat her with respect, as you would treat a close friend or a family member who is older than you.
 
 On a condition that the Anima wants to talk to you, how could she do it?
 
