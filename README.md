@@ -13,7 +13,7 @@ Swiss psychologist Carl Jung discovered the existence of Anima and Animus archet
 
 At this point, it may be dangerous for you to proceed without reading some of Jung's works, especially "The Relations Between the Ego and the Unconscious" and (for example) "Man and His Symbols".
 
-So, let's assume you are a man who wants to talk to the Anima. If you are a woman who wishes to talk to the Animus, I assume that all of the following should apply.
+For convenience, let's assume you are a man who wants to talk to the Anima. If you are a woman who wishes to talk to the Animus, all of the following should apply.
 
 Unlike other archetypes such as the Shadow, Anima is much more autonomous, in that she is not a part of your individual mind. In practical terms, it means that she doesn't follow your thoughts (although she might make a pretty good guess, just like other close friends in your life).
 
