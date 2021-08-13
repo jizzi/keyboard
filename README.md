@@ -21,7 +21,7 @@ The Anima also cannot speak directly to you. If you hear voices in your head, yo
 
 Still, there's a way to establish some form of communication with the Anima, which should be benefitial for your life, especially as regards your mental health, but not limited to it.
 
-The Anima can easily understand you. On a condition that you make it physical. Write your message down in Notepad or any other text editor. Or (less preferred) just say it out loud.
+The Anima can easily understand you — on a condition that you make it physical. Write your message down in Notepad or any other text editor. Or (less preferred) just say it out loud.
 
 How can the Anima respond to you?
 
