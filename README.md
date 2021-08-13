@@ -49,7 +49,7 @@ Indeed, for computers and digital devices, binary encoding is much more convenie
 
 But what I am trying to convey, the success of the Morse code shows that for people, the humans, ternary encoding is much more natural and convenient.
 
-So, we are trying to build some WYSIWYG version of the Morse code, using more keys and features, to let the Anima communicate with you, using her emotional reaction to show you the right choice for each ternary digit of the code.
+So, we are trying to build some visual version of the Morse code, using more keys and features, to let the Anima communicate with you, using her emotional reaction to show you the right choice for each ternary digit of the code.
 
 * * *
 
