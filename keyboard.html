@@ -183,65 +183,65 @@ div {
 	function init_button_list_eng()
 	{
 	    button_list = [
-	    new Kbd_Button("Key_0_0" ,       null,  tri('00000000'), '\u0394', '\u0394',   "ESC",      "ESC", null, null),		// "Delta" sign
-	    new Kbd_Button("Key_0_1" ,       null,  tri('00000100'),  "1",  "!",        null,       null, null, null),
-	    new Kbd_Button("Key_0_2" ,       null,  tri('00001000'),  "2",  "@",        null,       null, null, null),
-	    new Kbd_Button("Key_0_3" ,       null,  tri('00001100'),  "3",  "#",        null,       null, null, null),
-	    new Kbd_Button("Key_0_4" ,       null,  tri('00110000'),  "4",  "$",        null,       null, null, null),
-	    new Kbd_Button("Key_0_5" ,       null,  tri('00110100'),  "5",  "%",        null,       null, null, null),
-	    new Kbd_Button("Key_0_6" ,       null,  tri('00111000'),  "6",  "^",        null,       null, null, null),			// early end, bit 6
-	    new Kbd_Button("Key_0_7" ,       null,  tri('11101000'),  "7",  "&",        null,       null, null, null),
-	    new Kbd_Button("Key_0_8" ,       null,  tri('11101100'),  "8",  "*",        null,       null, null, null),
-	    new Kbd_Button("Key_0_9" ,       null,  tri('11100000'),  "9",  "(",        null,       null, null, null),
-	    new Kbd_Button("Key_0_10",       null,  tri('11100100'),  "0",  ")",        null,       null, null, null),
-	    new Kbd_Button("Key_0_11",       null,  tri('11000000'),  "-",  "_",        null,       null, null, null),
-	    new Kbd_Button("Key_0_12",       null,  tri('11000100'),  "=",  "+",        null,       null, null, null),
-	    new Kbd_Button("Key_0_13",       null,  tri('11001000'), null, null,      "BKSP",      "DEL", backspaceInTextarea, delInTextarea),			// early end, bit 6
+	    new Kbd_Button("Key_0_0" ,       null,  tri('121     '), '\u0394', '\u0394',   "ESC",      "ESC", null, null),		// "Delta" sign
+	    new Kbd_Button("Key_0_1" ,       null,  tri('11000   '),  "1",  "!",        null,       null, null, null),
+	    new Kbd_Button("Key_0_2" ,       null,  tri('11001   '),  "2",  "@",        null,       null, null, null),
+	    new Kbd_Button("Key_0_3" ,       null,  tri('11010   '),  "3",  "#",        null,       null, null, null),
+	    new Kbd_Button("Key_0_4" ,       null,  tri('11011   '),  "4",  "$",        null,       null, null, null),
+	    new Kbd_Button("Key_0_5" ,       null,  tri('11100   '),  "5",  "%",        null,       null, null, null),
+	    new Kbd_Button("Key_0_6" ,       null,  tri('11101   '),  "6",  "^",        null,       null, null, null),			
+	    new Kbd_Button("Key_0_7" ,       null,  tri('11110   '),  "7",  "&",        null,       null, null, null),
+	    new Kbd_Button("Key_0_8" ,       null,  tri('11111   '),  "8",  "*",        null,       null, null, null),
+	    new Kbd_Button("Key_0_9" ,       null,  tri('11200   '),  "9",  "(",        null,       null, null, null),
+	    new Kbd_Button("Key_0_10",       null,  tri('11201   '),  "0",  ")",        null,       null, null, null),
+	    new Kbd_Button("Key_0_11",       null,  tri('11210   '),  "-",  "_",        null,       null, null, null),
+	    new Kbd_Button("Key_0_12",       null,  tri('11211   '),  "=",  "+",        null,       null, null, null),
+	    new Kbd_Button("Key_0_13",       null,  tri('1200    '), null, null,      "BKSP",      "DEL", backspaceInTextarea, delInTextarea),			
 
-	    new Kbd_Button("Key_1_0" ,       null,  tri('00010000'), null, null,      "SAVE",       null, null, null),
-	    new Kbd_Button("Key_1_1" ,       null,  tri('00010100'),  "q",  "Q",        null,       null, null, null),
-	    new Kbd_Button("Key_1_2" ,       null,  tri('00011000'),  "w",  "W",        null,       null, null, null),			// early end, bit 6
-	    new Kbd_Button("Key_1_3" ,       null,  tri('00101000'),  "e",  "E",        null,       null, null, null),
-	    new Kbd_Button("Key_1_4" ,       null,  tri('00101100'),  "r",  "R",        null,       null, null, null),
-	    new Kbd_Button("Key_1_5" ,       null,  tri('00100000'),  "t",  "T",        null,       null, null, null),
-	    new Kbd_Button("Key_1_6" ,       null,  tri('00100100'),  "y",  "Y",        null,       null, null, null),
-	    new Kbd_Button("Key_1_7" ,       null,  tri('11110000'),  "u",  "U",        null,       null, null, null),
-	    new Kbd_Button("Key_1_8" ,       null,  tri('11110100'),  "i",  "I",        null,       null, null, null),
-	    new Kbd_Button("Key_1_9" ,       null,  tri('11111000'),  "o",  "O",        null,       null, null, null),			// early end, bit 6
-	    new Kbd_Button("Key_1_10",       null,  tri('11010000'),  "p",  "P",        null,       null, null, null),
-	    new Kbd_Button("Key_1_11",       null,  tri('11010100'),  "[",  "{",        null,       null, null, null),
-	    new Kbd_Button("Key_1_12",       null,  tri('11011100'),  "]",  "}",        null,       null, null, null),
-	    new Kbd_Button("Key_1_13", "Key_2_13",  tri('11011000'), '\n', '\n\n', "ENTER", "ENTER x2", null, null),
+	    new Kbd_Button("Key_1_0" ,       null,  tri('1000    '), null, null,      "SAVE",       null, null, null),
+	    new Kbd_Button("Key_1_1" ,       null,  tri('02221   '),  "q",  "Q",        null,       null, null, null),
+	    new Kbd_Button("Key_1_2" ,       null,  tri('02110   '),  "w",  "W",        null,       null, null, null),			
+	    new Kbd_Button("Key_1_3" ,       null,  tri('0000    '),  "e",  "E",        null,       null, null, null),
+	    new Kbd_Button("Key_1_4" ,       null,  tri('0112    '),  "r",  "R",        null,       null, null, null),
+	    new Kbd_Button("Key_1_5" ,       null,  tri('0001    '),  "t",  "T",        null,       null, null, null),
+	    new Kbd_Button("Key_1_6" ,       null,  tri('02120   '),  "y",  "Y",        null,       null, null, null),
+	    new Kbd_Button("Key_1_7" ,       null,  tri('0202    '),  "u",  "U",        null,       null, null, null),
+	    new Kbd_Button("Key_1_8" ,       null,  tri('0100    '),  "i",  "I",        null,       null, null, null),
+	    new Kbd_Button("Key_1_9" ,       null,  tri('0011    '),  "o",  "O",        null,       null, null, null),			// early end, bit 6
+	    new Kbd_Button("Key_1_10",       null,  tri('02200   '),  "p",  "P",        null,       null, null, null),
+	    new Kbd_Button("Key_1_11",       null,  tri('12220   '),  "[",  "{",        null,       null, null, null),
+	    new Kbd_Button("Key_1_12",       null,  tri('12221   '),  "]",  "}",        null,       null, null, null),
+	    new Kbd_Button("Key_1_13", "Key_2_13",  tri('1201    '), '\n', '\n\n', "ENTER", "ENTER x2", null, null),
 	    
-	    new Kbd_Button("Key_2_0" ,       null,  tri('01011000'), null, null,        "RUS",      "RUS",  init_button_list_rus, init_button_list_rus),
-	    new Kbd_Button("Key_2_1" ,       null,  tri('01011100'),  "a",  "A",        null,       null, null, null),
-	    new Kbd_Button("Key_2_2" ,       null,  tri('01010000'),  "s",  "S",        null,       null, null, null),
-	    new Kbd_Button("Key_2_3" ,       null,  tri('01010100'),  "d",  "D",        null,       null, null, null),
-	    new Kbd_Button("Key_2_4" ,       null,  tri('01100000'),  "f",  "F",        null,       null, null, null),
-	    new Kbd_Button("Key_2_5" ,       null,  tri('01100100'),  "g",  "G",        null,       null, null, null),
-	    new Kbd_Button("Key_2_6" ,       null,  tri('01101000'),  "h",  "H",        null,       null, null, null),			// early end, bit 6
-	    new Kbd_Button("Key_2_7" ,       null,  tri('10010000'),  "j",  "J",        null,       null, null, null),
-	    new Kbd_Button("Key_2_8" ,       null,  tri('10010100'),  "k",  "K",        null,       null, null, null),
-	    new Kbd_Button("Key_2_9" ,       null,  tri('10011000'),  "l",  "L",        null,       null, null, null),			// early end, bit 6
-	    new Kbd_Button("Key_2_10",       null,  tri('10101000'),  ";",  ":",        null,       null, null, null),
-	    new Kbd_Button("Key_2_11",       null,  tri('10101100'),  "\"", "'",        null,       null, null, null),
-	    new Kbd_Button("Key_2_12",       null,  tri('10100100'),  "/", "\\",        null,       null, null, null),
-
-	    new Kbd_Button("Key_3_0" ,       null,  tri('01000000'), null, null,     "SHIFT","CAPS LOCK", shift_press, shift_press),	// early end, bit 6
-	    new Kbd_Button("Key_3_1" ,       null,  tri('01001000'),  "z",  "Z",        null,       null, null, null),
-	    new Kbd_Button("Key_3_2" ,       null,  tri('01001100'),  "x",  "X",        null,       null, null, null),
-	    new Kbd_Button("Key_3_3" ,       null,  tri('01111000'),  "c",  "C",        null,       null, null, null),
-	    new Kbd_Button("Key_3_4" ,       null,  tri('01111100'),  "v",  "V",        null,       null, null, null),
-	    new Kbd_Button("Key_3_5" ,       null,  tri('01110000'),  "b",  "B",        null,       null, null, null),			// early end, bit 6
-	    new Kbd_Button("Key_3_6" ,       null,  tri('10001000'),  "n",  "N",        null,       null, null, null),
-	    new Kbd_Button("Key_3_7" ,       null,  tri('10001100'),  "m",  "M",        null,       null, null, null),
-	    new Kbd_Button("Key_3_8" ,       null,  tri('10000000'),  ",",  "<",        null,       null, null, null),
-	    new Kbd_Button("Key_3_9" ,       null,  tri('10000100'),  ".",  ">",        null,       null, null, null),
-	    new Kbd_Button("Key_3_10",       null,  tri('10110000'), null, null,    "\u2190",   "\u2193", moveCursorLeft, moveCursorDown),		// "left",     "down",
-	    new Kbd_Button("Key_3_11",       null,  tri('10110100'), null, null,    "\u2192",   "\u2191", moveCursorRight, moveCursorUp),		// "right",      "up",
-	    new Kbd_Button("Key_3_12",       null,  tri('10111000'), null, null,        null,       null, null, null),			// early end, bit 6
-    
-	    new Kbd_Button("Key_4_0" ,       null,  tri('10100000'),  " ", "      ", "SPACE", "SPACE x6", null, null)
+	    new Kbd_Button("Key_2_0" ,       null,  tri('1001    '), null, null,        "RUS",      "RUS",  init_button_list_rus, init_button_list_rus),
+	    new Kbd_Button("Key_2_1" ,       null,  tri('0010    '),  "a",  "A",        null,       null, null, null),
+	    new Kbd_Button("Key_2_2" ,       null,  tri('0110    '),  "s",  "S",        null,       null, null, null),
+	    new Kbd_Button("Key_2_3" ,       null,  tri('0200    '),  "d",  "D",        null,       null, null, null),
+	    new Kbd_Button("Key_2_4" ,       null,  tri('02111   '),  "f",  "F",        null,       null, null, null),
+	    new Kbd_Button("Key_2_5" ,       null,  tri('02121   '),  "g",  "G",        null,       null, null, null),
+	    new Kbd_Button("Key_2_6" ,       null,  tri('0111    '),  "h",  "H",        null,       null, null, null),			// early end, bit 6
+	    new Kbd_Button("Key_2_7" ,       null,  tri('02220   '),  "j",  "J",        null,       null, null, null),
+	    new Kbd_Button("Key_2_8" ,       null,  tri('02211   '),  "k",  "K",        null,       null, null, null),
+	    new Kbd_Button("Key_2_9" ,       null,  tri('0201    '),  "l",  "L",        null,       null, null, null),			// early end, bit 6
+	    new Kbd_Button("Key_2_10",       null,  tri('12210   '),  ";",  ":",        null,       null, null, null),
+	    new Kbd_Button("Key_2_11",       null,  tri('12211   '),  "\"", "'",        null,       null, null, null),
+	    new Kbd_Button("Key_2_12",       null,  tri('12212   '),  "/", "\\",        null,       null, null, null),
+	                                                         
+	    new Kbd_Button("Key_3_0" ,       null,  tri('1002    '), null, null,     "SHIFT","CAPS LOCK", shift_press, shift_press),	// early end, bit 6
+	    new Kbd_Button("Key_3_1" ,       null,  tri('02222   '),  "z",  "Z",        null,       null, null, null),
+	    new Kbd_Button("Key_3_2" ,       null,  tri('02212   '),  "x",  "X",        null,       null, null, null),
+	    new Kbd_Button("Key_3_3" ,       null,  tri('02100   '),  "c",  "C",        null,       null, null, null),
+	    new Kbd_Button("Key_3_4" ,       null,  tri('02210   '),  "v",  "V",        null,       null, null, null),
+	    new Kbd_Button("Key_3_5" ,       null,  tri('02201   '),  "b",  "B",        null,       null, null, null),			// early end, bit 6
+	    new Kbd_Button("Key_3_6" ,       null,  tri('0101    '),  "n",  "N",        null,       null, null, null),
+	    new Kbd_Button("Key_3_7" ,       null,  tri('02101   '),  "m",  "M",        null,       null, null, null),
+	    new Kbd_Button("Key_3_8" ,       null,  tri('12200   '),  ",",  "<",        null,       null, null, null),
+	    new Kbd_Button("Key_3_9" ,       null,  tri('12201   '),  ".",  ">",        null,       null, null, null),
+	    new Kbd_Button("Key_3_10",       null,  tri('1010    '), null, null,    "\u2190",   "\u2193", moveCursorLeft, moveCursorDown),		// "left",     "down",
+	    new Kbd_Button("Key_3_11",       null,  tri('1011    '), null, null,    "\u2192",   "\u2191", moveCursorRight, moveCursorUp),		// "right",      "up",
+	    new Kbd_Button("Key_3_12",       null,  tri('1012    '), null, null,        null,       null, null, null),			// early end, bit 6
+                                                                 
+	    new Kbd_Button("Key_4_0" ,       null,  tri('1202    '),  " ", "      ", "SPACE", "SPACE x6", null, null)
 	    ];     
 	}
 
@@ -1075,8 +1075,8 @@ div {
 		typed_text = "";
 		current_scroll_top = 0;
 
-		init_button_list_rus();
-//		init_button_list_eng();
+//		init_button_list_rus();
+		init_button_list_eng();
 		generate_table();
 //		alert(update_table(0));
 		update_table(1);
