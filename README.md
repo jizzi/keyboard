@@ -43,7 +43,7 @@ To send a message, people used a variety of codes, most importantly, the Morse c
 
 To a modern reader with at least a bit of interest in computer science, the Morse code looks like a typical binary encoding of alphanumeric characters, a somewhat dated ancestor of the ASCII table. But it's not really binary. It's ternary — because besides dots and dashes, you also have spaces between characters and words, which might have varied length which carries along some information.
 
-That's precisely why it looks dated for a person with computer science training. That XIX-th centery inventor, Samuel Morse, hasn't even managed to invent a proper binary encoding!
+That's precisely why it looks dated for a person with computer science training. That XIXth century inventor, Samuel Morse, hasn't even managed to invent a proper binary encoding!
 
 Indeed, for computers and digital devices, binary encoding is much more convenient.
 
