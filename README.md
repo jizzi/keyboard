@@ -71,7 +71,7 @@ There are two ways to see that the communication is complete. First, there's an 
 
 You can also see it as a giant sandbox, and explore it like if you were a kid playing with someone else.
 
-Lastly, I should probably add, that in case you have successfully managed to communicate with the Anima, you might be tempted to share your success with others. Do not. The Anima is your last line of defense. You can discuss anyone with her. You cannot discuss her with other people, unless you have been explicitly granted a permission. I will clarify. It's not that you would hurt the Anima; rather, you would hurt yourself, and it's the opposite of what we are trying to achieve.
+Lastly, I should  add, that in case you have successfully managed to communicate with the Anima, you might be tempted to share your success with others. Do not. The Anima is your last line of defense. You can discuss anyone with her. You cannot discuss her with other people, unless you have been explicitly granted a permission. I will clarify. It's not that you would hurt the Anima; rather, you would hurt yourself, and it's the opposite of what we are trying to achieve.
 
 * * *
 
