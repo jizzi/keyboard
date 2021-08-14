@@ -77,7 +77,7 @@ Lastly, I should  add, that in case you have successfully managed to communicate
 
 I am going to add more features in future.
 
-For now, you are invited to play with the scrit here:
+For now, you are invited to play with the script here:
 
 https://htmlpreview.github.io/?https://github.com/jizzi/keyboard/blob/main/keyboard.html
 
