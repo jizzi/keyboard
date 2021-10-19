@@ -177,7 +177,7 @@ function get_tree_position(key_index, k_cols, k_rows, k_num)
 //	alert(k_cols_factors);
 //	alert(k_rows_factors);
 
-//	alert (number_of_characters_to_show("блеать", "ЅЋяƒ№!"));
+//	alert (number_of_characters_to_show("\u0431\u043B\u0435\u0430\u0442\u044C", "\u0411\u041B\u042F\u0414\u042C!"));
 
 	var div_k_cols = get_value_from_factors_2_3(k_cols_factors);
 	var div_k_rows = get_value_from_factors_2_3(k_rows_factors);
