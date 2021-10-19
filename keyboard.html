@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta charset="windows-1251">
 <style>
 table, td {
   border-left: 7px solid LightGoldenRodYellow;
@@ -23,7 +24,47 @@ div {
 
 </style>
 
+
+
+<!-- dictionary definitions -->
+
+<script type="text/javascript" src="dict/dict.js"></script>  
+<script type="text/javascript" src="dict/dict_rus.js"></script>
+
+
 <script>
+/*	var tocqq = [];
+	var max_entries_per_level = [];
+
+	var dictionary = [];
+
+
+function init_rus_dict()
+{  
+	tocqq[0] = new Array(15, 13, 26);
+
+	tocqq[1] = new Array(15, 13, 26, 1345, 45642, 123423, 567);
+
+	dictionary = new Array("бла-бла-бла", "куку");
+
+	var toc = new Array();
+
+	max_entries_per_level = new Array(35, 15, 11, 7);
+
+	alert('qq');
+}  
+*/
+
+
+	// dictionary
+
+/*
+	var toc = new Array();
+	var max_entries_per_level = new Array();
+
+	var dictionary = new Array();
+*/
+	
 
 //	?
 //	overflow-x: visible;
@@ -32,17 +73,7 @@ div {
 	// approximate settings for table cell widths
 	// for table_spans, 2 is an usual "square" key
 	// ~ 14 keys per row...
-	const table_spans = [	2,   2, 2, 2, 2, 2,  2, 2, 2, 2, 2,  2, 2,  4,  0,			// 14 keys, sum_spans = 30
-				3,   2, 2, 2, 2, 2,  2, 2, 2, 2, 2,  2, 2,  3,  0,			// 14 keys
-				4,   2, 2, 2, 2, 2,  2, 2, 2, 2, 2,  2, 2,  2,  0,			// 13 keys (Enter -> -1)
-				5,   2, 2, 2, 2, 2,  2, 2, 2, 2, 2,  2, 3,  0,				// 13 keys
-				1,   0  /*,								// 1 key, total of 55
-				1, 1, 1, 1,   1, 1, 1, 1, 0,
-				1, 1, 1, 1,   1, 1, 1, 1, 0,
-				1, 1, 1, 1,   1, 1, 1, 1, 0,
-				1, 1, 1, 1,   1, 1, 1, 1, 0	*/
-				
-  	  	];
+	var  table_spans;
 
 	// precise values for table cell widths, in px
 	const cell_widths = [];
@@ -86,6 +117,9 @@ div {
 	// start position of the choice selector
 	var current_bit = num_bits - 1;
 
+	// number of rows in the present table
+	var current_number_of_rows = 0;
+
 	// whether "SHIFT" key has been pressed
 	var shift_isactive = 0;		
 
@@ -97,7 +131,7 @@ div {
 		//  2 -- CAPS LOCK
 	}
 	
-	function Kbd_Button(id1, id2, number, value1, value2, mask1, mask2, handler1, handler2) 
+	function Kbd_Button(id1, id2, number, value1, value2, mask1, mask2, handler1, handler2, args1, args2)
 	{
 	    // id2 -- alternative cell, for "Enter" button
 	    // value, mask, handler -> 2 for active "Shift"
@@ -110,9 +144,62 @@ div {
 	    this.mask2 = mask2;
 	    this.handler1 = handler1;
 	    this.handler2 = handler2;
+	    if (args1 !== undefined)
+	    {
+		this.args1 = args1;
+	    }
+	    else
+	    {
+		this.args1 = [];
+	    }
+
+	    if (args2 !== undefined)
+	    {
+		this.args2 = args2;
+	    }
+	    else
+	    {
+		this.args2 = [];
+	    }
+
 	}
 	  
 	var button_list;
+
+	function init_main_keyboard()
+	{
+		table_spans = [	2,   2, 2, 2, 2, 2,  2, 2, 2, 2, 2,  2, 2,  4,  0,			// 14 keys, sum_spans = 30
+				3,   2, 2, 2, 2, 2,  2, 2, 2, 2, 2,  2, 2,  3,  0,			// 14 keys
+				4,   2, 2, 2, 2, 2,  2, 2, 2, 2, 2,  2, 2,  2,  0,			// 13 keys (Enter -> -1)
+				5,   2, 2, 2, 2, 2,  2, 2, 2, 2, 2,  2, 3,  0,				// 13 keys
+				1,   0  /*,								// 1 key, total of 55
+				1, 1, 1, 1,   1, 1, 1, 1, 0,
+				1, 1, 1, 1,   1, 1, 1, 1, 0,
+				1, 1, 1, 1,   1, 1, 1, 1, 0,
+				1, 1, 1, 1,   1, 1, 1, 1, 0	*/
+		  	      ];
+
+		
+	}
+
+	function init_custom_simple_keyboard(key_rows, key_columns, max_keys)
+	{
+		var i, j, len = 0, cur_keys = 0;
+
+		table_spans = [];
+		for (i=0; i<key_rows && cur_keys < max_keys; i++)
+		{
+			for(j=0; j<key_columns && cur_keys < max_keys; j++)
+			{
+				table_spans[len] = 1;
+				len ++;
+				cur_keys ++;
+			}
+			table_spans[len] = 0;
+			len ++;
+		}
+	}
+
 
 	function init_button_list_rus()
 	{
@@ -173,7 +260,7 @@ div {
 	    new Kbd_Button("Key_3_9" ,       null,  tri('022201  '),  "\u044e",  "\u042e",        null,       null, null, null),	//	'ю'
 	    new Kbd_Button("Key_3_10",       null,  tri('1010    '), null, null,    "\u2190",   "\u2193", moveCursorLeft, moveCursorDown),		// "left",     "down",
 	    new Kbd_Button("Key_3_11",       null,  tri('1011    '), null, null,    "\u2192",   "\u2191", moveCursorRight, moveCursorUp),		// "right",      "up",
-	    new Kbd_Button("Key_3_12",       null,  tri('102     '), null, null,        null,       null, null, null),	
+	    new Kbd_Button("Key_3_12",       null,  tri('102     '), null, null,      "слово",       null,    start_rus_dict, null),	
                                                                
 	    new Kbd_Button("Key_4_0" ,       null,  tri('1200    '),  " ", "      ", "SPACE", "SPACE x6", null, null)
 	    ];     
@@ -239,7 +326,10 @@ div {
 	    new Kbd_Button("Key_3_9" ,       null,  tri('12201   '),  ".",  ">",        null,       null, null, null),
 	    new Kbd_Button("Key_3_10",       null,  tri('1010    '), null, null,    "\u2190",   "\u2193", moveCursorLeft, moveCursorDown),		// "left",     "down",
 	    new Kbd_Button("Key_3_11",       null,  tri('1011    '), null, null,    "\u2192",   "\u2191", moveCursorRight, moveCursorUp),		// "right",      "up",
-	    new Kbd_Button("Key_3_12",       null,  tri('1012    '), null, null,        null,       null, null, null),			// early end, bit 6
+//	    new Kbd_Button("Key_3_12",       null,  tri('1012    '), null, null,        null,       null, null, null),			// early end, bit 6
+	    new Kbd_Button("Key_3_12",       null,  tri('1012    '), null, null,        "word",       null, generate_table, null),			// early end, bit 6
+
+
                                                                  
 	    new Kbd_Button("Key_4_0" ,       null,  tri('1202    '),  " ", "      ", "SPACE", "SPACE x6", null, null)
 	    ];     
@@ -509,7 +599,7 @@ div {
 		var current_bit = 7;
 		var shift_isactive = 0;
 	*/
-		var current_handler, current_text;
+		var current_handler, current_text, current_args = [];
 
 		var active_button = 0, old_shift_isactive, chosen_buttons = 0;
 		if (current_bit <= 0)
@@ -530,18 +620,23 @@ div {
 				{
 					current_handler = button_list[active_button].handler1;
 					current_text = button_list[active_button].value1;
+					current_args = button_list[active_button].args1;
 				}
 				else
 				{
 					// SHIFT was pressed!
 					current_handler = button_list[active_button].handler2;
 					current_text = button_list[active_button].value2;
+					current_args = button_list[active_button].args2;
 				}
+
+				current_num = 0;
+				current_bit = num_bits - 1;
 
 				if (current_handler != null)
 				{
 					// call that function...
-					current_handler();
+					current_handler(current_args);
 				}
 				else if (current_text != null)
 				{
@@ -554,8 +649,6 @@ div {
 					shift_isactive = 0;
 				}
 
-				current_num = 0;
-				current_bit = num_bits - 1;
 			}
 			else
 			{
@@ -986,11 +1079,27 @@ div {
 		var tbl; 
 		var tblBody; 
 
+		// remove previous table, if it exists
+
+		var removeTab;
+		for (i = 0; i < current_number_of_rows; i++)
+		{
+			removeTab = document.getElementById('gen_table'+i);
+			if (removeTab != null)
+			{		
+				var parentEl = removeTab.parentElement;
+				parentEl.removeChild(removeTab);
+			}
+		}
+		// alert(current_number_of_rows);
+		current_number_of_rows = 0;
 
 		// creating all cells
 		var i, row_num, col_num;
 		var row = document.createElement("tr");
 		tbl = document.createElement("table");
+		tbl.id = "gen_table" + current_number_of_rows;
+		current_number_of_rows++;
 		tblBody = document.createElement("tbody");
 
 		row_num = 0;
@@ -1014,6 +1123,9 @@ div {
 			    if (i < table_spans.length - 1)
 			    {
 		 		    tbl = document.createElement("table");
+				    tbl.id = "gen_table" + current_number_of_rows;
+				    current_number_of_rows++;
+
 				    tblBody = document.createElement("tbody");
 
 				    row = document.createElement("tr");
@@ -1075,15 +1187,39 @@ div {
 		typed_text = "";
 		current_scroll_top = 0;
 
-//		init_button_list_rus();
-		init_button_list_eng();
+		current_number_of_rows = 0;
+
+		realize_normal_keyboard("rus");
+
+		renderTextToInnerHTML();
+	}
+
+	function realize_normal_keyboard(lang)
+	{
+		init_main_keyboard();
+
+		if (lang == "rus")
+		{
+			init_button_list_rus();
+		}
+		else if (lang == "eng")
+		{
+			init_button_list_eng();
+		}
+		else
+		{
+			alert('unknown language ' + lang);
+		}
+
+//		alert(factor_2_3(65536));
+
+
 		generate_table();
 //		alert(update_table(0));
 		update_table(1);
 
-
-		renderTextToInnerHTML();
 	}
+
 
 	function process_keydown(event)
 	{
@@ -1111,6 +1247,8 @@ div {
 
 
 </script>
+
+
 
 </head>
 <body style="background-color:#a0a0a0;">
