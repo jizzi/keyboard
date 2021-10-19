@@ -45,7 +45,7 @@ function init_rus_dict()
 
 	tocqq[1] = new Array(15, 13, 26, 1345, 45642, 123423, 567);
 
-	dictionary = new Array("бла-бла-бла", "куку");
+	dictionary = new Array("\u0431\u043B\u0430-\u0431\u043B\u0430-\u0431\u043B\u0430", "\u043A\u0443\u043A\u0443");
 
 	var toc = new Array();
 
@@ -220,47 +220,47 @@ function init_rus_dict()
 	    new Kbd_Button("Key_0_13",       null,  tri('1202    '), null, null,      "BKSP",      "DEL", backspaceInTextarea, delInTextarea),			
 
 	    new Kbd_Button("Key_1_0" ,       null,  tri('1002    '), null, null,      "SAVE",       null, null, null),
-	    new Kbd_Button("Key_1_1" ,       null,  tri('02210   '),  "\u0439",  "\u0419",        null,       null, null, null),	//	'й'
-	    new Kbd_Button("Key_1_2" ,       null,  tri('022210  '),  "\u0446",  "\u0426",        null,       null, null, null),	//	'ц'
-	    new Kbd_Button("Key_1_3" ,       null,  tri('02100   '),  "\u0443",  "\u0423",        null,       null, null, null),	//	'у'
-	    new Kbd_Button("Key_1_4" ,       null,  tri('02000   '),  "\u043a",  "\u041a",        null,       null, null, null),	//	'к'
-	    new Kbd_Button("Key_1_5" ,       null,  tri('0001    '),  "\u0435",  "\u0415",        null,       null, null, null),	//	'е'
-	    new Kbd_Button("Key_1_6" ,       null,  tri('0100    '),  "\u043d",  "\u041d",        null,       null, null, null),	//	'н'
-	    new Kbd_Button("Key_1_7" ,       null,  tri('02120   '),  "\u0433",  "\u0413",        null,       null, null, null),	//	'г'
-	    new Kbd_Button("Key_1_8" ,       null,  tri('022200  '),  "\u0448",  "\u0428",        null,       null, null, null),	//	'ш'
-	    new Kbd_Button("Key_1_9" ,       null,  tri('022211  '),  "\u0449",  "\u0429",        null,       null, null, null),	//	'щ'
-	    new Kbd_Button("Key_1_10",       null,  tri('02122   '),  "\u0437",  "\u0417",        null,       null, null, null),	//	'з'
-	    new Kbd_Button("Key_1_11",       null,  tri('02211   '),  "\u0445",  "\u0425",        null,       null, null, null),	//	'х'
-	    new Kbd_Button("Key_1_12",       null,  tri('022222  '),  "\u044a",  "\u042a",        null,       null, null, null),	//	'ъ'
+	    new Kbd_Button("Key_1_1" ,       null,  tri('02210   '),  "\u0439",  "\u0419",        null,       null, null, null),	//	'\u0439'
+	    new Kbd_Button("Key_1_2" ,       null,  tri('022210  '),  "\u0446",  "\u0426",        null,       null, null, null),	//	'\u0446'
+	    new Kbd_Button("Key_1_3" ,       null,  tri('02100   '),  "\u0443",  "\u0423",        null,       null, null, null),	//	'\u0443'
+	    new Kbd_Button("Key_1_4" ,       null,  tri('02000   '),  "\u043a",  "\u041a",        null,       null, null, null),	//	'\u043A'
+	    new Kbd_Button("Key_1_5" ,       null,  tri('0001    '),  "\u0435",  "\u0415",        null,       null, null, null),	//	'\u0435'
+	    new Kbd_Button("Key_1_6" ,       null,  tri('0100    '),  "\u043d",  "\u041d",        null,       null, null, null),	//	'\u043D'
+	    new Kbd_Button("Key_1_7" ,       null,  tri('02120   '),  "\u0433",  "\u0413",        null,       null, null, null),	//	'\u0433'
+	    new Kbd_Button("Key_1_8" ,       null,  tri('022200  '),  "\u0448",  "\u0428",        null,       null, null, null),	//	'\u0448'
+	    new Kbd_Button("Key_1_9" ,       null,  tri('022211  '),  "\u0449",  "\u0429",        null,       null, null, null),	//	'\u0449'
+	    new Kbd_Button("Key_1_10",       null,  tri('02122   '),  "\u0437",  "\u0417",        null,       null, null, null),	//	'\u0437'
+	    new Kbd_Button("Key_1_11",       null,  tri('02211   '),  "\u0445",  "\u0425",        null,       null, null, null),	//	'\u0445'
+	    new Kbd_Button("Key_1_12",       null,  tri('022222  '),  "\u044a",  "\u042a",        null,       null, null, null),	//	'\u044A'
 	    new Kbd_Button("Key_1_13", "Key_2_13",  tri('1201    '),  '\n',      '\n\n', "ENTER", "ENTER x2", null, null),
 	    
 	    new Kbd_Button("Key_2_0" ,       null,  tri('1000    '), null, null,        "ENG",      "ENG",  init_button_list_eng, init_button_list_eng),
-	    new Kbd_Button("Key_2_1" ,       null,  tri('022221  '),  "\u0444",  "\u0424",        null,       null, null, null),	//	'ф'
-	    new Kbd_Button("Key_2_2" ,       null,  tri('02110   '),  "\u044b",  "\u042b",        null,       null, null, null),	//	'ы'
-	    new Kbd_Button("Key_2_3" ,       null,  tri('0120    '),  "\u0432",  "\u0412",        null,       null, null, null),	//	'в'
-	    new Kbd_Button("Key_2_4" ,       null,  tri('0010    '),  "\u0430",  "\u0410",        null,       null, null, null),	//	'а'
-	    new Kbd_Button("Key_2_5" ,       null,  tri('02011   '),  "\u043f",  "\u041f",        null,       null, null, null),	//	'п'
-	    new Kbd_Button("Key_2_6" ,       null,  tri('0111    '),  "\u0440",  "\u0420",        null,       null, null, null),	//	'р'
-	    new Kbd_Button("Key_2_7" ,       null,  tri('0000    '),  "\u043e",  "\u041e",        null,       null, null, null),	//	'о'
-	    new Kbd_Button("Key_2_8" ,       null,  tri('0121    '),  "\u043b",  "\u041b",        null,       null, null, null),	//	'л'
-	    new Kbd_Button("Key_2_9" ,       null,  tri('02010   '),  "\u0434",  "\u0414",        null,       null, null, null),	//	'д'
-	    new Kbd_Button("Key_2_10",       null,  tri('02212   '),  "\u0436",  "\u0416",        null,       null, null, null),	//	'ж'
-	    new Kbd_Button("Key_2_11",       null,  tri('022220  '),  "\u044d",  "\u042d",        null,       null, null, null),	//	'э'
+	    new Kbd_Button("Key_2_1" ,       null,  tri('022221  '),  "\u0444",  "\u0424",        null,       null, null, null),	//	'\u0444'
+	    new Kbd_Button("Key_2_2" ,       null,  tri('02110   '),  "\u044b",  "\u042b",        null,       null, null, null),	//	'\u044B'
+	    new Kbd_Button("Key_2_3" ,       null,  tri('0120    '),  "\u0432",  "\u0412",        null,       null, null, null),	//	'\u0432'
+	    new Kbd_Button("Key_2_4" ,       null,  tri('0010    '),  "\u0430",  "\u0410",        null,       null, null, null),	//	'\u0430'
+	    new Kbd_Button("Key_2_5" ,       null,  tri('02011   '),  "\u043f",  "\u041f",        null,       null, null, null),	//	'\u043F'
+	    new Kbd_Button("Key_2_6" ,       null,  tri('0111    '),  "\u0440",  "\u0420",        null,       null, null, null),	//	'\u0440'
+	    new Kbd_Button("Key_2_7" ,       null,  tri('0000    '),  "\u043e",  "\u041e",        null,       null, null, null),	//	'\u043E'
+	    new Kbd_Button("Key_2_8" ,       null,  tri('0121    '),  "\u043b",  "\u041b",        null,       null, null, null),	//	'\u043B'
+	    new Kbd_Button("Key_2_9" ,       null,  tri('02010   '),  "\u0434",  "\u0414",        null,       null, null, null),	//	'\u0434'
+	    new Kbd_Button("Key_2_10",       null,  tri('02212   '),  "\u0436",  "\u0416",        null,       null, null, null),	//	'\u0436'
+	    new Kbd_Button("Key_2_11",       null,  tri('022220  '),  "\u044d",  "\u042d",        null,       null, null, null),	//	'\u044D'
 	    new Kbd_Button("Key_2_12",       null,  tri('1222    '),  "\"", "'",        null,       null, null, null),                    	
 	                                                       
 	    new Kbd_Button("Key_3_0" ,       null,  tri('1001    '), null, null,     "SHIFT","CAPS LOCK", shift_press, shift_press),	
-	    new Kbd_Button("Key_3_1" ,       null,  tri('02101   '),  "\u044f",  "\u042f",        null,       null, null, null),	//	'я'
-	    new Kbd_Button("Key_3_2" ,       null,  tri('02201   '),  "\u0447",  "\u0427",        null,       null, null, null),	//	'ч'
-	    new Kbd_Button("Key_3_3" ,       null,  tri('0110    '),  "\u0441",  "\u0421",        null,       null, null, null),	//	'с'
-	    new Kbd_Button("Key_3_4" ,       null,  tri('02001   '),  "\u043c",  "\u041c",        null,       null, null, null),	//	'м'
-	    new Kbd_Button("Key_3_5" ,       null,  tri('0011    '),  "\u0438",  "\u0418",        null,       null, null, null),	//	'и'
-	    new Kbd_Button("Key_3_6" ,       null,  tri('0101    '),  "\u0442",  "\u0422",        null,       null, null, null),	//	'т'
-	    new Kbd_Button("Key_3_7" ,       null,  tri('02111   '),  "\u044c",  "\u042c",        null,       null, null, null),	//	'ь'
-	    new Kbd_Button("Key_3_8" ,       null,  tri('02200   '),  "\u0431",  "\u0411",        null,       null, null, null),	//	'б'
-	    new Kbd_Button("Key_3_9" ,       null,  tri('022201  '),  "\u044e",  "\u042e",        null,       null, null, null),	//	'ю'
+	    new Kbd_Button("Key_3_1" ,       null,  tri('02101   '),  "\u044f",  "\u042f",        null,       null, null, null),	//	'\u044F'
+	    new Kbd_Button("Key_3_2" ,       null,  tri('02201   '),  "\u0447",  "\u0427",        null,       null, null, null),	//	'\u0447'
+	    new Kbd_Button("Key_3_3" ,       null,  tri('0110    '),  "\u0441",  "\u0421",        null,       null, null, null),	//	'\u0441'
+	    new Kbd_Button("Key_3_4" ,       null,  tri('02001   '),  "\u043c",  "\u041c",        null,       null, null, null),	//	'\u043C'
+	    new Kbd_Button("Key_3_5" ,       null,  tri('0011    '),  "\u0438",  "\u0418",        null,       null, null, null),	//	'\u0438'
+	    new Kbd_Button("Key_3_6" ,       null,  tri('0101    '),  "\u0442",  "\u0422",        null,       null, null, null),	//	'\u0442'
+	    new Kbd_Button("Key_3_7" ,       null,  tri('02111   '),  "\u044c",  "\u042c",        null,       null, null, null),	//	'\u044C'
+	    new Kbd_Button("Key_3_8" ,       null,  tri('02200   '),  "\u0431",  "\u0411",        null,       null, null, null),	//	'\u0431'
+	    new Kbd_Button("Key_3_9" ,       null,  tri('022201  '),  "\u044e",  "\u042e",        null,       null, null, null),	//	'\u044E'
 	    new Kbd_Button("Key_3_10",       null,  tri('1010    '), null, null,    "\u2190",   "\u2193", moveCursorLeft, moveCursorDown),		// "left",     "down",
 	    new Kbd_Button("Key_3_11",       null,  tri('1011    '), null, null,    "\u2192",   "\u2191", moveCursorRight, moveCursorUp),		// "right",      "up",
-	    new Kbd_Button("Key_3_12",       null,  tri('102     '), null, null,      "слово",       null,    start_rus_dict, null),	
+	    new Kbd_Button("Key_3_12",       null,  tri('102     '), null, null,      "\u0441\u043B\u043E\u0432\u043E",       null,    start_rus_dict, null),	
                                                                
 	    new Kbd_Button("Key_4_0" ,       null,  tri('1200    '),  " ", "      ", "SPACE", "SPACE x6", null, null)
 	    ];     
@@ -341,13 +341,13 @@ function init_rus_dict()
 
 
 	    new Kbd_Button("Key_0_6" ,       null,  tri('00111000'),  "6",  "%",        null,       null, null, null),			// early end, bit 6
-	    new Kbd_Button("Key_1_2" ,       null,  tri('00011000'),  "ц",  "Ц",        null,       null, null, null),			// early end, bit 6
-	    new Kbd_Button("Key_1_9" ,       null,  tri('11111000'),  "щ",  "Щ",        null,       null, null, null),			// early end, bit 6
-	    new Kbd_Button("Key_2_6" ,       null,  tri('01101000'),  "р",  "Р",        null,       null, null, null),			// early end, bit 6
+	    new Kbd_Button("Key_1_2" ,       null,  tri('00011000'),  "\u0446",  "\u0426",        null,       null, null, null),			// early end, bit 6
+	    new Kbd_Button("Key_1_9" ,       null,  tri('11111000'),  "\u0449",  "\u0429",        null,       null, null, null),			// early end, bit 6
+	    new Kbd_Button("Key_2_6" ,       null,  tri('01101000'),  "\u0440",  "\u0420",        null,       null, null, null),			// early end, bit 6
 
-	    new Kbd_Button("Key_2_9" ,       null,  tri('10011000'),  "д",  "Д",        null,       null, null, null),			// early end, bit 6
+	    new Kbd_Button("Key_2_9" ,       null,  tri('10011000'),  "\u0434",  "\u0414",        null,       null, null, null),			// early end, bit 6
 	    new Kbd_Button("Key_3_0" ,       null,  tri('01000000'), null, null,     "SHIFT","CAPS LOCK", shift_press, shift_press),	// early end, bit 6
-	    new Kbd_Button("Key_3_5" ,       null,  tri('01110000'),  "и",  "И",        null,       null, null, null),			// early end, bit 6
+	    new Kbd_Button("Key_3_5" ,       null,  tri('01110000'),  "\u0438",  "\u0418",        null,       null, null, null),			// early end, bit 6
 
 	    new Kbd_Button("Key_3_12",       null,  tri('10111000'), null, null,        null,       null, null, null),			// early end, bit 6
 */
