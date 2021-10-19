@@ -20,6 +20,8 @@ var toc_shift = new Array();
 
 var current_dictionary_level = 0;
 
+//const up_one_level = "\ufe5d\u21e7\ufe5e";
+const up_one_level = "\u3014 &nbsp; <b>\u21e7</b> &nbsp; \u3015";
 
 function start_rus_dict()
 {
@@ -453,7 +455,7 @@ function realize_dict(key_index, lang)
 		
 		if (i == 0)
 		{
-			button_list[bll] = new Kbd_Button(key_cap, null, tree_pos, null, null, "..", "..", realize_dict_wrapper, realize_dict_wrapper, args, args);
+			button_list[bll] = new Kbd_Button(key_cap, null, tree_pos, null, null, up_one_level, up_one_level, realize_dict_wrapper, realize_dict_wrapper, args, args);
 		}
 		else
 		{
