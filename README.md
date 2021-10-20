@@ -67,6 +67,8 @@ If you know the right group of keys, press "Enter" or "Space" on your real keybo
 
 If you have made a mistake, there are two options. First, there's a "backspace" key on the virtual keyboard, which can be used to erase a wrongly typed letter. Second, there's a backspace key on your real keyboard, which undoes one single choice at a time.
 
+You can also use mouse clicks on the keys. A single click switches a key group, and a double click applies your choice of the key group. A double click on an inactive key undoes one choice. Touches on mobile devices also work! A single touch would select a key group, and two consecutive touches on the same key would apply the choice (or undo it, if you tap an inactive key twice).
+
 There are two ways to see that the communication is complete. First, there's an "ESC" key on the virtual keyboard. It types a capital Greek letter "Delta" (looks like a triangle), which the Anima might use to make it clear that her response is complete. Second, if the Anima shows that there's no right decision at the top level of the virtual keyboard, that might mean either that she wants you to consider or guess the meaning of what she said; or that she is no longer interested. Try talking to her another time!
 
 You can also see it as a giant sandbox, and explore it like if you were a kid playing with someone else.
@@ -79,4 +81,4 @@ I am going to add more features in future.
 
 For now, you are invited to play with the script here:
 
-https://raw.githack.com/jizzi/keyboard/main/keyboard.html
+https://rawcdn.githack.com/jizzi/keyboard/e1dd2ad39f4fd6cdf552ec643a289eea56339086/keyboard.html
