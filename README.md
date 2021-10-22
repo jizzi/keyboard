@@ -81,4 +81,4 @@ I am going to add more features in future.
 
 For now, you are invited to play with the script here:
 
-https://rawcdn.githack.com/jizzi/keyboard/e1dd2ad39f4fd6cdf552ec643a289eea56339086/keyboard.html
+https://rawcdn.githack.com/jizzi/keyboard/f80d83d29baed0346bca020035df4a3ed7b2f0ba/keyboard.html
