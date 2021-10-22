@@ -404,8 +404,9 @@ function realize_dict(key_index, lang)
 	}
 
 	// amount of keys
-	var key_num = max_entries_per_level[current_dictionary_level - 1];
-	var key_num_alt;
+	var key_num, key_num_alt;
+
+	key_num = max_entries_per_level[current_dictionary_level - 1];
 	if (current_dictionary_level > dtoc.length)
 	{
 		// key_num may be less than the maximum value...
@@ -416,6 +417,13 @@ function realize_dict(key_index, lang)
 			key_num = key_num_alt;
 //			alert('last_word = ' + last_word.toString() + ', word_index = ' + word_index.toString());
 		}
+	}
+
+	if (key_num == 1)
+	{
+		type_chosen_word(dictionary[word_index], lang);
+
+		return;
 	}
 
 
