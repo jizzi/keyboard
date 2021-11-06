@@ -841,10 +841,24 @@ div {
 
 		var i;
 
+		// $...$ sequences need to be processed as a single symbol
+
+		var dollar_sign_counts = 0;
+
 
 		if (direction == "left")
 		{
-			start --;
+			do
+			{
+				start --;
+				if (typed_text.charAt(start) == '$' )
+				{
+					dollar_sign_counts ++;
+				}
+			}
+			while ( dollar_sign_counts % 2 != 0 && start >= 0);
+
+
 			if (start < 0)
 			{
 				start = 0;
@@ -853,7 +867,17 @@ div {
 		}
 		else if (direction == "right")
 		{
-			end ++;
+			do
+			{
+				if (typed_text.charAt(end) == '$' )
+				{
+					dollar_sign_counts ++;
+				}
+				end ++;
+			}
+			while ( dollar_sign_counts % 2 != 0 && end <= typed_text.length);
+
+
 			if (end > typed_text.length)
 			{
 				end = typed_text.length;
@@ -1103,45 +1127,6 @@ div {
 		update_scroll();
 	}
 
-
-/*	function renderTextToInnerHTML()
-	{
-		// from the pure text, stored internally,
-		// get HTML to be placed inside div
-		var i, nline;
-		var html_text = "";
-
-		// insert cursor after selection_end!
-		var typed_text_c = typed_text.substring(0, selection_end) + "<span id = \"span_cursor\">" +
-				   cursor_symbol + "</span>" + typed_text.substring(selection_end);
-
-		// render for internal HTML
-		nline = 0;
-		html_text += "<span id = \"span_line_"+ nline + "\">";
-
-		for (i = 0; i < typed_text_c.length; i++)
-		{
-			if (typed_text_c.charAt(i) == '\n')
-			{
-				html_text += "</span><br>";
-				nline ++;
-				html_text += "<span id = \"span_line_"+ nline + "\">";
-			}
-			else
-			{
-				html_text += typed_text_c.charAt(i);
-			}
-		}
-
-		html_text += "</span>";
-
-		
-		document.getElementById("my_text_field").innerHTML = html_text;
-
-//		obtainLineOffsetTop();
-		update_scroll();
-	}
-*/
 
 
 	function update_scroll()
