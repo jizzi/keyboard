@@ -202,6 +202,19 @@ function get_tree_position(key_index, k_cols, k_rows, k_num)
 //	alert('k_cols_factors = [' + k_cols_factors[0].toString() + ', ' + k_cols_factors[1].toString() + ']; ' + 
 //	      'k_rows_factors = [' + k_rows_factors[0].toString() + ', ' + k_rows_factors[1].toString() + ']');
 
+
+	// key_index starts with 1
+	var last_used_column = (k_num - 1) % k_cols;
+	if (last_used_column >= div_k_cols)
+	{
+		first_unused_column = div_k_cols - 1;
+	}
+
+	var div_last_used_column = last_used_column, rem_last_used_column = 0, new_trit_value_for_last_used_column = 0;
+	
+	var last_used_row = Math.ceil(k_num / k_cols) - 1;
+	var col_coincide = 1;
+
 	while(div_k_cols > 1 || div_k_rows > 1)
 	{
 		new_trit = 0;
@@ -217,6 +230,39 @@ function get_tree_position(key_index, k_cols, k_rows, k_num)
 				new_trit = 1;
 				new_trit_value = div_a_cols;
 				div_a_cols = rem_a_cols;
+
+				// possibly need to skip one step
+				// I calculate tree positions for the last used table cell, too
+				// and if "my" table cell ends up in the same branch as the last used cell,
+				// then there's no real choice, so I just need to skip that step
+				rem_last_used_column =  div_last_used_column % div_k_cols;
+				div_last_used_column = (div_last_used_column - rem_last_used_column) / div_k_cols;
+				new_trit_value_for_last_used_column = div_last_used_column;
+				div_last_used_column = rem_last_used_column;
+
+				if (new_trit_value_for_last_used_column != new_trit_value)
+				{
+					col_coincide = 0;
+				}
+
+				if ( (k_row_num == last_used_row) && (new_trit_value == 0) && (new_trit_value_for_last_used_column == 0) 
+				     && (col_coincide == 1) && (div_k_rows == 1) )
+				{
+					/*
+					alert('get_tree_position, skip condition,\nkey_index = ' + key_index.toString() + 
+					      ', k_cols = ' + k_cols.toString() + ', k_rows = ' + 
+					      k_rows.toString() + ', k_num = ' + k_num.toString() + 
+					      ',\nlast_used_row = ' + last_used_row.toString() + 
+					      ', last_used_column = ' + last_used_column.toString() +
+					      ',\nk_col_num = ' + k_col_num.toString() +
+					      ', k_row_num = ' + k_row_num.toString() + 
+					      ',\n div_k_cols = ' + div_k_cols.toString());
+					*/
+
+					// cancel branching at this point
+					new_trit = 0;
+				}
+
 			}
 			direction = "rows";
 		}
