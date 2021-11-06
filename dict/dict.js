@@ -21,7 +21,10 @@ var toc_shift = new Array();
 var current_dictionary_level = 0;
 
 //const up_one_level = "\ufe5d\u21e7\ufe5e";
-const up_one_level = "\u3014 &nbsp; <b>\u21e7</b> &nbsp; \u3015";
+const up_one_level 	  = "\u3014 &nbsp; <b>\u21e7</b> &nbsp; \u3015";
+const up_one_level_narrow = "\u3014<b>\u21e7</b>\u3015";
+// if more cols than this const, use 'narrow' version of up_one_level
+const max_cols_for_full_caption = 6;		
 
 function start_rus_dict()
 {
