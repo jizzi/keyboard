@@ -13,6 +13,13 @@ td {
   text-align: center;
 }
 
+td img{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
 div {
   font-size: 24px;
   background-color: white; 
@@ -30,6 +37,10 @@ div {
 
 <script type="text/javascript" src="dict/dict.js"></script>  
 <script type="text/javascript" src="dict/dict_rus.js"></script>
+
+<!-- emoji      definitions -->
+<script type="text/javascript" src="dict/emoji_lib.js"></script>  
+<script type="text/javascript" src="dict/glyph_lib.js"></script>  
 
 
 <script>
@@ -59,6 +70,11 @@ div {
 	const color_right    = "#72e74b";
 	// background color of the "wrong" choice
 	const color_wrong    = "#99e6ff";
+
+	// emojis height
+	const emoji_keyboard_height = 32;
+	const emoji_textfield_height = 24;
+
 
 	// symbol used to define cursor
 	const cursor_symbol  = "\u2026";			// horizontal ellipsis
@@ -92,6 +108,12 @@ div {
 	var shift_isactive = 0;		
 
 	var last_touch_id = [];
+
+	// in "typed_text" string,
+	// '$xxx$' is treated internally as Unicode emoji number "xxx"
+	// '$0$' is '$'
+
+
 
 	function shift_press()
 	{
@@ -134,7 +156,7 @@ div {
 
 	}
 	  
-	var button_list;
+	var button_list, emoji_list;
 
 	function init_main_keyboard()
 	{
@@ -142,7 +164,7 @@ div {
 				3,   2, 2, 2, 2, 2,  2, 2, 2, 2, 2,  2, 2,  3,  0,			// 14 keys
 				4,   2, 2, 2, 2, 2,  2, 2, 2, 2, 2,  2, 2,  2,  0,			// 13 keys (Enter -> -1)
 				5,   2, 2, 2, 2, 2,  2, 2, 2, 2, 2,  2, 3,  0,				// 13 keys
-				1,   0  /*,								// 1 key, total of 55
+				28.15,  1.85, 0  /*,							// 2 keys, total of 56
 				1, 1, 1, 1,   1, 1, 1, 1, 0,
 				1, 1, 1, 1,   1, 1, 1, 1, 0,
 				1, 1, 1, 1,   1, 1, 1, 1, 0,
@@ -170,6 +192,8 @@ div {
 		}
 	}
 
+//	const emoji_button = "<span style=\"color:red\">&#x2661;</span>";
+	const emoji_button = "&#x2661;";
 
 	function init_button_list_rus()
 	{
@@ -230,9 +254,10 @@ div {
 	    new Kbd_Button("Key_3_9" ,       null,  tri('022201  '),  "\u044e",  "\u042e",        null,       null, null, null),	//	'\u044E'
 	    new Kbd_Button("Key_3_10",       null,  tri('1010    '), null, null,    "\u2190",   "\u2193", moveCursorLeft, moveCursorDown),		// "left",     "down",
 	    new Kbd_Button("Key_3_11",       null,  tri('1011    '), null, null,    "\u2192",   "\u2191", moveCursorRight, moveCursorUp),		// "right",      "up",
-	    new Kbd_Button("Key_3_12",       null,  tri('102     '), null, null,      "\u0441\u043B\u043E\u0432\u043E",       null,    start_rus_dict, null),	
+	    new Kbd_Button("Key_3_12",       null,  tri('1020    '), null, null,      "\u0441\u043B\u043E\u0432\u043E",       null,    start_rus_dict, null),	
                                                                
-	    new Kbd_Button("Key_4_0" ,       null,  tri('1200    '),  " ", "      ", "SPACE", "SPACE x6", null, null)
+	    new Kbd_Button("Key_4_0" ,       null,  tri('1200    '),  " ", "      ", "SPACE", "SPACE x6", null, null),
+	    new Kbd_Button("Key_4_1" ,       null,  tri('1021    '),  null, null, emoji_button, emoji_button, start_rus_emoji, start_rus_emoji)
 	    ];     
 	}
 
@@ -244,7 +269,7 @@ div {
 	    new Kbd_Button("Key_0_1" ,       null,  tri('11000   '),  "1",  "!",        null,       null, null, null),
 	    new Kbd_Button("Key_0_2" ,       null,  tri('11001   '),  "2",  "@",        null,       null, null, null),
 	    new Kbd_Button("Key_0_3" ,       null,  tri('11010   '),  "3",  "#",        null,       null, null, null),
-	    new Kbd_Button("Key_0_4" ,       null,  tri('11011   '),  "4",  "$",        null,       null, null, null),
+	    new Kbd_Button("Key_0_4" ,       null,  tri('11011   '),  "4",  "$0$",      null,        "$", null, null),
 	    new Kbd_Button("Key_0_5" ,       null,  tri('11100   '),  "5",  "%",        null,       null, null, null),
 	    new Kbd_Button("Key_0_6" ,       null,  tri('11101   '),  "6",  "^",        null,       null, null, null),			
 	    new Kbd_Button("Key_0_7" ,       null,  tri('11110   '),  "7",  "&",        null,       null, null, null),
@@ -297,11 +322,13 @@ div {
 	    new Kbd_Button("Key_3_10",       null,  tri('1010    '), null, null,    "\u2190",   "\u2193", moveCursorLeft, moveCursorDown),		// "left",     "down",
 	    new Kbd_Button("Key_3_11",       null,  tri('1011    '), null, null,    "\u2192",   "\u2191", moveCursorRight, moveCursorUp),		// "right",      "up",
 //	    new Kbd_Button("Key_3_12",       null,  tri('1012    '), null, null,        null,       null, null, null),			// early end, bit 6
-	    new Kbd_Button("Key_3_12",       null,  tri('1012    '), null, null,        null,        null, null, null),			// early end, bit 6
+	    new Kbd_Button("Key_3_12",       null,  tri('10120   '), null, null,        null,        null, null, null),			// early end, bit 6
 
 
                                                                  
-	    new Kbd_Button("Key_4_0" ,       null,  tri('1202    '),  " ", "      ", "SPACE", "SPACE x6", null, null)
+	    new Kbd_Button("Key_4_0" ,       null,  tri('1202    '),  " ", "      ", "SPACE", "SPACE x6", null, null),
+	    new Kbd_Button("Key_4_1" ,       null,  tri('10121   '),  null, null, emoji_button, emoji_button, start_eng_emoji, start_eng_emoji)
+
 	    ];     
 	}
 
@@ -1029,6 +1056,69 @@ div {
 		nline = 0;
 		html_text += "<span id = \"span_line_"+ nline + "\">";
 
+		var opening_glyph = 0, glyph_start, glyph_id;
+
+		for (i = 0; i < typed_text_c.length; i++)
+		{
+			if (typed_text_c.charAt(i) == '\n')
+			{
+				html_text += "</span><br>";
+				nline ++;
+				html_text += "<span id = \"span_line_"+ nline + "\">";
+			}
+			if (typed_text_c.charAt(i) == '$')
+			{
+				if (opening_glyph == 0)
+				{
+					glyph_start = i + 1;
+					opening_glyph = 1;
+				}
+				else
+				{
+					glyph_id = parseInt(typed_text_c.substring(glyph_start, i));
+					if (isNaN(glyph_id) || glyph_id == 0)	// '$' sign
+					{
+						html_text += '$';
+					}
+					else
+					{
+						html_text += get_HTML_from_glyph_id(glyph_id, emoji_textfield_height);
+					}
+
+					opening_glyph = 0;
+				}
+			}
+			else if (opening_glyph == 0)
+			{
+				html_text += typed_text_c.charAt(i);
+			}
+		}
+
+		html_text += "</span>";
+
+		
+		document.getElementById("my_text_field").innerHTML = html_text;
+
+//		obtainLineOffsetTop();
+		update_scroll();
+	}
+
+
+/*	function renderTextToInnerHTML()
+	{
+		// from the pure text, stored internally,
+		// get HTML to be placed inside div
+		var i, nline;
+		var html_text = "";
+
+		// insert cursor after selection_end!
+		var typed_text_c = typed_text.substring(0, selection_end) + "<span id = \"span_cursor\">" +
+				   cursor_symbol + "</span>" + typed_text.substring(selection_end);
+
+		// render for internal HTML
+		nline = 0;
+		html_text += "<span id = \"span_line_"+ nline + "\">";
+
 		for (i = 0; i < typed_text_c.length; i++)
 		{
 			if (typed_text_c.charAt(i) == '\n')
@@ -1051,6 +1141,8 @@ div {
 //		obtainLineOffsetTop();
 		update_scroll();
 	}
+*/
+
 
 	function update_scroll()
 	{
@@ -1272,6 +1364,10 @@ div {
 		realize_normal_keyboard("rus");
 
 		renderTextToInnerHTML();
+
+		// init emojis
+		load_emojis();
+		populate_emoji_toc();
 	}
 
 	function realize_normal_keyboard(lang)
