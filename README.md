@@ -77,8 +77,6 @@ Lastly, I should add, that in case you have successfully managed to communicate 
 
 * * *
 
-I am going to add more features in future.
+You can play with the script here:
 
-For now, you are invited to play with the script here:
-
-https://rawcdn.githack.com/jizzi/keyboard/2fe164d3fb09facab106a1769e5cc0769b776c7a/keyboard.html
+https://rawcdn.githack.com/jizzi/keyboard/18d3d2af2a1e328f3ccacba56c06dbd2272751f6/keyboard.html
