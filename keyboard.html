@@ -792,12 +792,43 @@ div {
 	{
 		var start = selection_start;
 		var end = selection_end;
-		start -= num_backspace;
+		var dollar_sign_counts = 0;
+
+		var i = 0;
+//		start -= num_backspace;
+		for (i = 0; i < num_backspace; i++)
+		{
+			do
+			{
+				start --;
+				if (typed_text.charAt(start) == '$' )
+				{
+					dollar_sign_counts ++;
+				}
+			}
+			while ( dollar_sign_counts % 2 != 0 && start >= 0);
+		}
+
 		if (start < 0)
 		{
 			start = 0;
 		}
-		end += num_del;
+
+//		end += num_del;
+		dollar_sign_counts = 0;
+		for (i = 0; i < num_del; i++)
+		{
+			do
+			{
+				if (typed_text.charAt(end) == '$' )
+				{
+					dollar_sign_counts ++;
+				}
+				end ++;
+			}
+			while ( dollar_sign_counts % 2 != 0 && end <= typed_text.length);
+		}
+
 		if (end > typed_text.length)
 		{
 			end = typed_text.length;
@@ -821,6 +852,52 @@ div {
 	function delInTextarea() 
 	{
 		deletingInTextarea(document.getElementById("my_text_field"), 0, 1);
+	}
+
+	function crawl_through_string(str, loc_count)
+	{
+		// crawl through string... find the number of symbols, glyph-aware, or find the position of the loc_count'th symbol
+		var i;
+		var dollar_sign_counts = 0;
+		var count_to = -1;
+		if (typeof loc_count != 'undefined') 
+		{
+			count_to = loc_count;
+		}
+		var number_of_symbols = 0;
+
+		if (count_to == 0)
+		{
+			return 0;
+		}
+
+		for (i = 0; i < str.length; i++)
+		{
+			if (str.charAt(i) == '$' )
+			{
+				dollar_sign_counts ++;
+			}
+
+			if (dollar_sign_counts % 2 == 0)
+			{
+				number_of_symbols ++;
+				if (number_of_symbols == count_to)
+				{
+					return i + 1;
+				}
+			}
+		}
+
+		if (count_to > 0)
+		{
+			return i;
+		}
+		else
+		{
+//			alert('crawl_through_string(\'' + str + '\') = ' + number_of_symbols.toString());
+			return number_of_symbols;
+		}
+
 	}
 
 
@@ -919,6 +996,41 @@ div {
 
 //			alert('pos = ' + pos + ', pos_line = ' + pos_line + ', pos_column = ' + pos_column);
 
+			// constrain the current line between two respective positions: (...)
+			var prev_enter_position, next_enter_position, next_x2_enter_position;
+			if (i == 0)
+			{
+				// because position == 0 is a valid character!
+				prev_enter_position = -1;
+			}
+			else
+			{
+				prev_enter_position = enter_positions[i - 1];
+			}
+
+			if (i == enter_positions.length)
+			{
+				next_enter_position = typed_text.length;
+			}
+			else
+			{
+				next_enter_position = enter_positions[i];
+			}
+
+			if (i >= enter_positions.length - 1)
+			{
+				next_x2_enter_position = typed_text.length;
+			}
+			else
+			{
+				next_x2_enter_position = enter_positions[i + 1];
+			}
+
+
+			//
+			var pos_column_glyph_aware;
+			pos_column_glyph_aware = crawl_through_string(typed_text.substring(prev_enter_position + 1, pos));
+
 			if (direction == "up")
 			{
 				if (pos_line == 0)
@@ -936,16 +1048,20 @@ div {
 						new_pos = enter_positions[pos_line - 2] + 1;
 					}
 
+					/*
 					if (pos_column > line_lengths[pos_line - 1])
 					{
 						pos_column = line_lengths[pos_line - 1];
 					}
 
-					new_pos += pos_column;
+					new_pos += pos_column;*/
+					new_pos += crawl_through_string(typed_text.substring(new_pos, prev_enter_position), pos_column_glyph_aware);
 				}
 			}
 			else	// direction == "down"
 			{
+//				alert('move down, pos_line = ' + pos_line.toString() + ', pos_column_g_a = ' + pos_column_glyph_aware.toString());
+
 				if (pos_line == enter_positions.length)
 				{
 					// cursor on the last line
@@ -953,12 +1069,15 @@ div {
 				}
 				else
 				{
-					if (pos_column > line_lengths[pos_line + 1])
+/*					if (pos_column > line_lengths[pos_line + 1])
 					{
 						pos_column = line_lengths[pos_line + 1];
 					}
 
 					new_pos = enter_positions[pos_line] + 1 + pos_column;
+*/
+					new_pos = enter_positions[pos_line] + 1;
+					new_pos += crawl_through_string(typed_text.substring(new_pos, next_x2_enter_position), pos_column_glyph_aware);
 				}
 			}
 
