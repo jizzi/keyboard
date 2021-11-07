@@ -213,7 +213,11 @@ function get_tree_position(key_index, k_cols, k_rows, k_num)
 	var div_last_used_column = last_used_column, rem_last_used_column = 0, new_trit_value_for_last_used_column = 0;
 	
 	var last_used_row = Math.ceil(k_num / k_cols) - 1;
+	var div_last_used_row    = last_used_row   , rem_last_used_row    = 0, new_trit_value_for_last_used_row    = 0;
+
+
 	var col_coincide = 1;
+	var col_fall_behind = 0;
 
 	while(div_k_cols > 1 || div_k_rows > 1)
 	{
@@ -243,6 +247,11 @@ function get_tree_position(key_index, k_cols, k_rows, k_num)
 				if (new_trit_value_for_last_used_column != new_trit_value)
 				{
 					col_coincide = 0;
+				}
+
+				if (new_trit_value_for_last_used_column < new_trit_value)
+				{
+					col_fall_behind = 1;
 				}
 
 				if ( (k_row_num == last_used_row) && (new_trit_value == 0) && (new_trit_value_for_last_used_column == 0) 
@@ -278,6 +287,21 @@ function get_tree_position(key_index, k_cols, k_rows, k_num)
 				new_trit = 1;
 				new_trit_value = div_a_rows;
 				div_a_rows = rem_a_rows;
+
+				// possibly need to skip one step here, either
+				rem_last_used_row =  div_last_used_row % div_k_rows;
+				div_last_used_row = (div_last_used_row - rem_last_used_row) / div_k_rows;
+				new_trit_value_for_last_used_row = div_last_used_row;
+				div_last_used_row = rem_last_used_row;
+
+				if ( (k_row_num == last_used_row - 1) && (new_trit_value == 0) && (new_trit_value_for_last_used_row > 0) 
+				     && (col_fall_behind == 1) )
+				{
+					// cancel branching at this point
+					new_trit = 0;
+				}
+
+
 			}
 
 			factor = 5 - factor;
