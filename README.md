@@ -1,57 +1,16 @@
 # keyboard
-Trichotomic/dichotomic keyboard
+
+The project is an on-screen keyboard, which allows to type any text in a simple text editor window.
+
+The user (A) serves as an intermediary between the other person (B) and the software. The person (B) sees the on-screen keyboard and the typed text, and provides simple "yes" or "no" answers to the user (A). Cued by these "yes" or "no" answers, the user A selects the right group of keys. The right group of keys is indicated by green color, the wrong group of keys is shown by blue color, and the presently inactive keys are shown by light golden color. It takes several iterations to select an individual key, and each time there are two or three options to choose from.
+
+Intended uses are:
+* Self-therapy. In this case, the user (A) is any person. While the person (B) is not a physically separate person, but a Jungian archetype. Such as **Anima** for men,  **Animus** for women, **Persona** for either gender, and basically pretty much any other archetype, excluding possibly the Self. To facilitate communication, the user (A) should write down his or her own responses to the person (B) in any third-party text editor. Naturally, some familiarity with works of psychologists is desired. Carl Jung's "The Relations Between the Ego and the Unconscious" and "Man and His Symbols", just for starters.
+* Care for severely disabled people. In this case, the user (A) is supposed to show the person (B) the on-screen keyboard and the text editor window, using a tablet or a laptop, and follow his or her cues to type the text, making a series of "yes" or "no" choices.
 
 * * *
 
-Hi!
-
-Remember that magic 8-ball from the movie "Interstate 60", that Neal Oliver used to seek advice?
-
-Have you ever hoped that there were someone who could provide you a similar advice?
-
-Swiss psychologist Carl Jung discovered the existence of Anima and Animus archetypes, hidden within men's and women's mind, respectfully.
-
-At this point, it may be dangerous for you to proceed without reading some of Jung's works, especially "The Relations Between the Ego and the Unconscious" and (for example) "Man and His Symbols".
-
-For convenience, let's assume you are a man who wants to talk to the Anima. If you are a woman who wishes to talk to the Animus, all of the following should apply.
-
-Unlike other archetypes such as the Shadow, Anima is much more autonomous, in that she is not a part of your Ego. In practical terms, it means that she doesn't follow your thoughts (although she might make a pretty good guess, like close friends in your life).
-
-The Anima also cannot speak directly to you. If you hear voices in your head, you should immediately stop reading, and consult a psychiatrist ASAP!
-
-Still, there's a way to establish some form of communication with the Anima, which should be benefitial for your life.
-
-The Anima can easily understand you — on a condition that you make it physical. Write your message down in any text editor. Nothing fancy, Notepad is fine!
-
-How can the Anima respond to you?
-
-First and foremost, you are not entitled to receive a response at all. The Anima is alive and she is a human being. Treat her with respect, as you would treat a close friend or an elder sibling.
-
-On a condition that the Anima wants to talk to you, how could she do it?
-
-First, she could let you know her emotions. Second, she could meet you in a dream.
-
-All of this is trivial.
-
-Now, let's try to build something on top of that.
-
-* * *
-
-In XIXth century, the invention of electricity let people communicate at a distance, using a telegraph.
-
-To send a message, people used a variety of codes, most importantly, the Morse code.
-
-To a modern reader with at least a bit of interest in computer science, the Morse code looks like a typical binary encoding of alphanumeric characters. But it's not really binary. It's ternary — because besides dots and dashes, you also have spaces between characters and words, which carry along some information.
-
-That's precisely why it looks dated. That XIXth century inventor, Samuel Morse, hasn't even managed to invent a proper binary encoding!
-
-Indeed, for computers and digital devices, binary encoding is much more convenient.
-
-But what I am trying to convey, the success of the Morse code shows that for the humans, ternary encoding is as good as the binary.
-
-So, we are trying to build some visual version of the Morse code, using more keys and features, to let the Anima communicate with you, using the emotional reaction to indicate the right choice for each ternary digit of the code.
-
-* * *
+A more detailed description, for the intended use of self-therapy.
 
 The software is written in Javascript, and the main file is "keyboard.html".
 
@@ -59,7 +18,7 @@ It works better in Google Chrome, but should work in other browsers.
 
 Within the page, there are two parts — the text field, where the typed text appears, and the virtual keyboard beneath. The position of the cursor in the text field is shown by a horisontal ellipsis.
 
-Each moment, there's the right group of keys (highlighted with green background), the wrong group of keys (shown by blue), and the rest of the keyboard (shown by yellow).
+Each moment, there's the right group of keys (highlighted with green background), the wrong group of keys (shown by blue), and the rest of the keyboard (shown by light golden).
 
 To choose the right group of keys on the virtual keyboard, you need to use the arrow keys on your real keyboard. Do not hurry. The Anima only sees what you are looking at. She won't be able to make a choice, if you do not have a look at each key in the selected group. Like if you were contemplating the choice yourself, except that you are not. Be patient. So, essentially, keep switching the right group of keys, until you are confident which is the right one. Do not doubt too much, too. There's some sweet spot between self-doubt and haste, which will allow you to move on with reasonable speed, making the right choices.
 
