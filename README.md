@@ -38,6 +38,6 @@ Lastly, I should add, that in case you have successfully managed to communicate 
 
 * * *
 
-You can play with the script here:
+The link to the software:
 
 https://rawcdn.githack.com/jizzi/keyboard/18d3d2af2a1e328f3ccacba56c06dbd2272751f6/keyboard.html
