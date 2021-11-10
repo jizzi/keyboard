@@ -8,9 +8,11 @@ Intended uses are:
 * Self-therapy. In this case, the user (A) is any person. While the person (B) is not a physically separate person, but a Jungian archetype. Such as **Anima** for men,  **Animus** for women, **Persona** for either gender, and basically pretty much any other archetype, excluding possibly the Self. To facilitate communication, the user (A) should write down his or her own responses to the person (B) in any third-party text editor. Naturally, some familiarity with works of psychologists is desired. Carl Jung's "The Relations Between the Ego and the Unconscious" and "Man and His Symbols", just for starters.
 * Care for severely disabled people. In this case, the user (A) is supposed to show the person (B) the on-screen keyboard and the text editor window, using a tablet or a laptop, and follow his or her cues to type the text, making a series of "yes" or "no" choices.
 
+There are two keyboard layouts, English and Russian. The layout can be chosen by selecting the "ENG" or "RUS" key, respectively.
+
 * * *
 
-A more detailed description, for the intended use of self-therapy.
+A more detailed description, for the intended use case of self-therapy. For ease of notation, it's supposed that the user (A) is a man, and the person (B) is his Anima.
 
 The software is written in Javascript, and the main file is "keyboard.html".
 
