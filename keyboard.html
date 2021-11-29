@@ -112,7 +112,11 @@ div {
 	// in "typed_text" string,
 	// '$xxx$' is treated internally as Unicode emoji number "xxx"
 	// '$0$' is '$'
+	// '$-1$' is '&nbsp;'
+	// '$-2$' is 7 non breaking spaces
 
+	const NBSP_1 = '&nbsp;';
+	const NBSP_2 = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
 
 
 	function shift_press()
@@ -256,7 +260,7 @@ div {
 	    new Kbd_Button("Key_3_11",       null,  tri('1011    '), null, null,    "\u2192",   "\u2191", moveCursorRight, moveCursorUp),		// "right",      "up",
 	    new Kbd_Button("Key_3_12",       null,  tri('1020    '), null, null,      "\u0441\u043B\u043E\u0432\u043E",       null,    start_rus_dict, null),	
                                                                
-	    new Kbd_Button("Key_4_0" ,       null,  tri('1200    '),  " ", "      ", "SPACE", "SPACE x6", null, null),
+	    new Kbd_Button("Key_4_0" ,       null,  tri('1200    '),  "$-1$", "$-2$", "SPACE", "TAB", null, null),
 	    new Kbd_Button("Key_4_1" ,       null,  tri('1021    '),  null, null, emoji_button, emoji_button, start_rus_emoji, start_rus_emoji)
 	    ];     
 	}
@@ -326,7 +330,7 @@ div {
 
 
                                                                  
-	    new Kbd_Button("Key_4_0" ,       null,  tri('1202    '),  " ", "      ", "SPACE", "SPACE x6", null, null),
+	    new Kbd_Button("Key_4_0" ,       null,  tri('1202    '),  "$-1$", "$-2$", "SPACE", "TAB", null, null),
 	    new Kbd_Button("Key_4_1" ,       null,  tri('10121   '),  null, null, emoji_button, emoji_button, start_eng_emoji, start_eng_emoji)
 
 	    ];     
@@ -1222,6 +1226,22 @@ div {
 					if (isNaN(glyph_id) || glyph_id == 0)	// '$' sign
 					{
 						html_text += '$';
+					}
+					else if (glyph_id < 0)
+					{
+						// special characters
+						if (glyph_id == -1)
+						{
+							html_text += NBSP_1;
+						}
+						else if (glyph_id == -2)
+						{
+							html_text += NBSP_2;
+						}
+						else
+						{
+							html_text += '&lt;unknown ID, '+ glyph_id.toString() +'&gt;';
+						}
 					}
 					else
 					{
