@@ -33,6 +33,14 @@ function start_rus_dict()
 	realize_dict(0, "rus");
 }
 
+function start_eng_dict()
+{
+	// another simple wrapper
+	current_dictionary_level = 0;
+	realize_dict(0, "eng");
+}
+
+
 
 function factor_2_3(k)
 {
@@ -126,9 +134,11 @@ function number_of_characters_to_show(a, b)
 
 	var i;
 
-	for (i=1; i<al.length; i++)
+	for (i=1; i < al.length; i++)
 	{
-		if (al.substring(0, i) != bl.substring(0, i))
+//		if (al.substring(0, i) != bl.substring(0, i))
+//		if ( (al.substring(0, i) != bl.substring(0, i)) && ( al.substring(i-1, i) != ' ') )
+		if ( (al.substring(0, i) != bl.substring(0, i)) && ( al.substring(i-1, i) != ' ') && ( bl.substring(i-1, i) != ' '))
 		{
 			break;
 		}
@@ -182,7 +192,7 @@ function get_tree_position(key_index, k_cols, k_rows, k_num)
 //	alert(k_cols_factors);
 //	alert(k_rows_factors);
 
-//	alert (number_of_characters_to_show("\u0431\u043B\u0435\u0430\u0442\u044C", "\u0411\u041B\u042F\u0414\u042C!"));
+//	alert (number_of_characters_to_show("áëåàòü", "ÁËßÄÜ!"));
 
 	var div_k_cols = get_value_from_factors_2_3(k_cols_factors);
 	var div_k_rows = get_value_from_factors_2_3(k_rows_factors);
@@ -388,9 +398,8 @@ function realize_dict(key_index, lang)
 		}
 		else
 		{
-			// to do!
-			alert ('eng dict -- to do!');
-			return;
+			// defined in "dict_eng.js"
+			init_eng_dict();
 		}
 		
 	}
@@ -480,17 +489,42 @@ function realize_dict(key_index, lang)
 	var key_num, key_num_alt;
 
 	key_num = max_entries_per_level[current_dictionary_level - 1];
+	key_num_alt = key_num;
 	if (current_dictionary_level > dtoc.length)
 	{
 		// key_num may be less than the maximum value...
 		key_num_alt = Math.ceil( (last_word - word_index) / toc_shift[current_dictionary_level - 1] );
 
-		if (key_num_alt < key_num)
+	}
+	else if (current_dictionary_level == dtoc.length)
+	{
+//		last_toc_entry += toc_choice[i] * toc_shift[i];
+		// single use case
+		for (i = last_toc_entry + toc_shift[dtoc.length-2] - 1; i > last_toc_entry; i--)
 		{
+			if (dtoc[dtoc.length-1][i] == dtoc[dtoc.length-1][i-1])
+			{
+				key_num_alt --;
+			}
+			else
+			{
+				break;
+			}
+		}
+
+/*		if (key_num_alt < key_num)
+		{
+			alert('key_num_alt == ' + key_num_alt.toString());
+		}
+*/
+	}
+
+	if (key_num_alt < key_num)
+	{
 			key_num = key_num_alt;
 //			alert('last_word = ' + last_word.toString() + ', word_index = ' + word_index.toString());
-		}
 	}
+
 
 	if (key_num == 1)
 	{
@@ -570,7 +604,20 @@ function realize_dict(key_index, lang)
 
 			if (word2_ind - word1_ind > 1)
 			{
-				caption = word1.substring(0, chars_to_show1) + ' \u2013 <br/> \u2013 ' + word2_prev.substring(0, chars_to_show2);
+				max_chars_to_show = 8;	// don't display long dash if caption length exceeds this value
+
+				caption = word1.substring(0, chars_to_show1);
+				if (chars_to_show1 <= max_chars_to_show || current_dictionary_level > 1)
+				{
+					caption += ' \u2013 ';
+				}
+				caption += '<br/>';
+				if (chars_to_show2 <= max_chars_to_show || current_dictionary_level > 1)
+				{
+					caption += ' \u2013 ';
+				}
+				caption += word2_prev.substring(0, chars_to_show2);
+
 				caption = caption.toLowerCase();
 			}
 			else
