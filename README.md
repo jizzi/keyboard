@@ -40,4 +40,4 @@ Lastly, I should add, that in case you have successfully managed to communicate 
 
 The link to the software:
 
-https://rawcdn.githack.com/jizzi/keyboard/9723a72cf98d68b2c6337d994937264cc56e47eb/keyboard.html
+https://rawcdn.githack.com/jizzi/keyboard/017448c1adc73267affc9d640e17450756961d9a/keyboard.html
