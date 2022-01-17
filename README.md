@@ -6,7 +6,7 @@ Wouldn't it be wonderful, if you could shoot an email using your microwave oven?
 
 This is attained by attaching a tree structure to keys of an on-screen keyboard. Essentially, think of a Morse code merged with an Ouija board.
 
-To type a letter on the keyboard (or to press one of the special keys), the user needs to make several consecutive choices, each time selecting a group of keys containing the desired key. After each selection the amount of keys in a group is divided by two or three, so in a short time the choice is narrowed to a single key.
+To type a letter on the keyboard (or to press one of the special keys), the user is supposed to make several consecutive choices, each time selecting a group of keys containing the desired key. After each selection the amount of keys in a group is divided by two or three, so in a short time the choice is narrowed to a single key.
 
 There are two keyboard layouts, English and Russian (the default one). The layout can be chosen by selecting the "ENG" or "RUS" key, respectively.
 
