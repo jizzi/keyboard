@@ -18,7 +18,7 @@ To engage in a conversation with the Anima, you can write down your questions in
 
 To write down the response of your Anima—if the Anima wishes to communicate with you—use the on-screen keyboard, using the emotional input as cues to select a key. It's an unique perspective—thinking out of the box.
 
-It shouldn't compromise your mental health. But, you can never be completely sure. If you find yourself doubting the integrity of your mind, please consult a therapist.
+It shouldn't compromise your mental health. But, you can never be completely sure. If you find yourself at a risk of psychosis, please stop using this software, and possibly consult a therapist.
 
 * * *
 
