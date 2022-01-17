@@ -16,7 +16,9 @@ In Carl Jung's "Two essays on analytical psychology" you can learn about the exi
 
 To engage in a conversation with the Anima, you can write down your questions in any third-party text editor such as Notepad.
 
-To write down the response of your Anima—if the Anima wishes to communicate with you—use the on-screen keyboard, using the emotional input as cues to select a key. It takes considerable effort, so do not expect idle chat. As the Anima also represents man's intuition, such a conversation has a potential of thinking out of the box, helping you navigate any complicated life or work situations.
+To write down the response of your Anima—if the Anima wishes to communicate with you—use the on-screen keyboard, using the emotional input as cues to select a key. It's an unique perspective—thinking out of the box.
+
+It shouldn't compromise your mental health. But, you can never be completely sure. If you find yourself doubting the integrity of your mind, please consult a therapist.
 
 * * *
 
