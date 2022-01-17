@@ -789,6 +789,12 @@ div {
 	{
 		var start = selection_start;
 		var end = selection_end;
+
+		if (start > end)
+		{
+			[start, end] = [end, start];
+		}
+
 		const before = typed_text.substring(0, start);
 		const after  = typed_text.substring(end, typed_text.length);
 		typed_text = (before + newText + after);
@@ -805,10 +811,20 @@ div {
 		var end = selection_end;
 		var dollar_sign_counts = 0;
 
+		if (start > end)
+		{
+			[start, end] = [end, start];
+		}
+
 		var i = 0;
 //		start -= num_backspace;
 		for (i = 0; i < num_backspace; i++)
 		{
+			if (num_del == 0 && end > start && i == 0)
+			{
+				continue;
+			}
+			
 			do
 			{
 				start --;
@@ -918,16 +934,12 @@ div {
 		return (chr >= '0' && chr <= '9') || (chr >= 'A' && chr <= 'Z') || (chr >= 'a' && chr <= 'z') ||
 //		       (chr >= "\u0430" && chr <= "\u044f") && (chr >= "\u0410" && chr <= "\u042f");
 		       (chr >= "\u0410" && chr <= "\u044f") && (chr != "\u0401") && (chr != "\u0451");
-
-	
 	}
 
 	function is_numeric(chr)
 	{
 		// chr is a character
 		return (chr >= '0' && chr <= '9') ;
-
-	
 	}
 
 
@@ -1299,12 +1311,6 @@ div {
 		}
 
 
-
-//		var typed_text_c = typed_text.substring(0, selection_end) + "<span class = \"selection\" id = \"span_cursor\">" +
-//				   cursor_symbol + "</span>" + typed_text.substring(selection_end);
-
-//		var typed_text_c = typed_text.substring(0, selection_end) + "<span id = \"span_cursor\">" +
-//				   cursor_symbol + "</span>" + typed_text.substring(selection_end);
 
 		// render for internal HTML
 		nline = 0;
