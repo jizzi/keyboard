@@ -14,9 +14,9 @@ There are two keyboard layouts, English and Russian (the default one). The layou
 
 In Carl Jung's "Two essays on analytical psychology" you can learn about the existence of Anima/Animus archetype. Anima is a "*semiconscious psychic complex, having partial autonomy of function*" (par. 302). For a modern man, it's "*quite right to treat the anima as an autonomous personality and to address personal questions to her*" (par. 322). To achieve that, "*The psyche not being a unity but a contradictory multiplicity of complexes, the dissociation required for our dialectics with the anima is not so terribly difficult. The art of it consists only in allowing our invisible partner to make herself heard, in putting the mechanism of expression momentarily at her disposal, without being overcome by the distaste one naturally feels at playing such an apparently ludicrous game with oneself, or by doubts as to the genuineness of the voice of one’s interlocutor*" (par. 323).
 
-To engage in a conversation with the Anima, you can write down your questions in any third-party text editor such as Notepad.
+To engage in a conversation with the Anima, you can write down your questions in any third-party text editor such as Notepad. It might help if you address her explicitly.
 
-To write down the response of your Anima—if the Anima wishes to communicate with you—use the on-screen keyboard, using the emotional input as cues to select a key. It's an unique perspective—thinking out of the box.
+To write down the response of your Anima—if the Anima wishes to communicate with you—use the on-screen keyboard, using the emotional input from the Anima as cues to select a key. It's an unique perspective—thinking out of the box.
 
 It shouldn't compromise your mental health. But, you can never be completely sure. You are dealing with powerful forces here. In computer science parlance, that can be compared to getting root access to your mind. In Jung's words, "*The secret is that only that which can destroy itself is truly alive.*" ("Psychology and Alchemy", par. 93.)
 
