@@ -50,4 +50,4 @@ Lastly, I should add, that in case you have successfully managed to communicate 
 
 The link to the software:
 
-https://rawcdn.githack.com/jizzi/keyboard/ff14cd04c23711990956899d1af6d1ed68055232/keyboard.html
+https://rawcdn.githack.com/jizzi/keyboard/7e0dbf50046fa6f81fa5cb4336257b84e10ea689/keyboard.html
