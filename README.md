@@ -1,18 +1,22 @@
 # keyboard
 
-The project is an on-screen keyboard, which allows to type any text in a simple text editor window.
+The project is an on-screen keyboard, which allows to type any text in a simple text editor window. With a constraint, that the user might have access to only a couple of buttons, at most.
 
-The user (A) serves as an intermediary between the other person (B) and the software. The person (B) sees the on-screen keyboard and the typed text, and provides simple "yes" or "no" answers to the user (A). Cued by these "yes" or "no" answers, the user A selects the right group of keys. The right group of keys is indicated by green color, the wrong group of keys is shown by blue color, and the presently inactive keys are shown by light golden color. It takes several iterations to select an individual key, and each time there are two or three options to choose from.
+Wouldn't it be wonderful, if you could shoot an email using your microwave oven?
 
-Intended uses are:
-* Self-therapy. In this case, the user (A) is any person. While the person (B) is not a physically separate person, but a Jungian archetype. Such as **Anima** for men,  **Animus** for women, **Persona** for either gender, and basically pretty much any other archetype, excluding possibly the **Self** (emojis should work for either the Self or the **Subconscious**, but their amount is quite limited). To facilitate communication, the user (A) should write down his or her own responses to the person (B) in any third-party text editor. Naturally, some familiarity with works of psychologists is desired. Carl Jung's "The Relations Between the Ego and the Unconscious" and "Man and His Symbols", just for starters.
-* Care for severely disabled people. In this case, the user (A) is supposed to show the person (B) the on-screen keyboard and the text editor window, using a tablet or a laptop, and follow his or her cues to type the text, making a series of "yes" or "no" choices.
+This is attained by attaching a tree structure to keys of an on-screen keyboard. Essentially, it's a Morse-like code merged with an Ouija board.
 
-There are two keyboard layouts, English and Russian. The layout can be chosen by selecting the "ENG" or "RUS" key, respectively.
+To type a letter on the keyboard (or to press one of the special keys), the user needs to make several consecutive choices, each time selecting a group of keys containing the desired key. After each selection the amount of keys in a group is divided by two or three, so in a short time the choice is narrowed to a single key.
+
+There are two keyboard layouts, English and Russian (the default one). The layout can be chosen by selecting the "ENG" or "RUS" key, respectively.
 
 * * *
 
-A more detailed description, for the intended use case of self-therapy. For ease of notation, it's supposed that the user (A) is a man, and the person (B) is his Anima.
+In Carl Jung's "Two essays on analytical psychology" you can learn about the existence of Anima/Animus archetype. Anima is a "*semiconscious psychic complex, having partial autonomy of function*" (par. 302). For a modern man, it's "*quite right to treat the anima as an autonomous personality and to address personal questions to her*" (par. 322). To achieve that, "*The psyche not being a unity but a contradictory multiplicity of complexes, the dissociation required for our dialectics with the anima is not so terribly difficult. The art of it consists only in allowing our invisible partner to make herself heard, in putting the mechanism of expression momentarily at her disposal, without being overcome by the distaste one naturally feels at playing such an apparently ludicrous game with oneself, or by doubts as to the genuineness of the voice of one’s interlocutor*" (par. 323).
+
+To engage in a conversation with the Anima, it's suggested to write down your questions in any third-party text editor such as Notepad. To write down the response of your Anima, use the on-screen keyboard, using the emotional input as cues to select a key. It takes considerable effort, so do not expect idle chat. As the Anima also represents man's intuition, such a conversation has a potential of thinking out of the box, helping you navigate any complicated life or work situations.
+
+* * *
 
 The software is written in Javascript, and the main file is "keyboard.html".
 
