@@ -29,6 +29,11 @@ div {
   overflow-y: auto;
 }
 
+.selection {
+  background-color: #2020f0;
+  color: #ffffff;
+}
+
 </style>
 
 
@@ -951,6 +956,9 @@ div {
 
 //		alert('left = ' + left.toString());
 //		alert('selection_start = ' + selection_start.toString());
+		// render selection...
+		renderTextToInnerHTML();
+
 		return typed_text.substring(left, right);
 	}
 
@@ -1204,6 +1212,27 @@ div {
 		line_lengths.push(typed_text.length - prev_break);
 	}
 
+	function getLineForElement(el_pos)
+	{
+		// returns line number for the character at "el_pos" position
+		processEnterPositions();
+
+		var line_number = enter_positions.length;
+
+		for (i = 0; i < enter_positions.length; i++)
+		{
+			if (el_pos < enter_positions[i])
+			{
+				line_number = i;
+				break;
+			}
+		}
+
+		return line_number;
+	}
+
+
+
 	// const line_offsetTop = [];
 	// var cursor_offsetTop = 0;
 
@@ -1246,22 +1275,63 @@ div {
 		var html_text = "";
 
 		// insert cursor after selection_end!
-		var typed_text_c = typed_text.substring(0, selection_end) + "<span id = \"span_cursor\">" +
-				   cursor_symbol + "</span>" + typed_text.substring(selection_end);
+		var code_sel_start = "<span class = \"selection\">", code_sel_end = "</span>";
+
+		var line_sel_start, line_sel_end;
+		line_sel_start = getLineForElement(selection_start);
+		line_sel_end   = getLineForElement(selection_end);
+
+		if (selection_start > selection_end)
+		{
+			[line_sel_start, line_sel_end] = [line_sel_end, line_sel_start];
+
+			var typed_text_c = typed_text.substring(0, selection_end) + code_sel_start +
+					   "<span id = \"span_cursor\">" + cursor_symbol + "</span>" + 
+					   typed_text.substring(selection_end, selection_start) + code_sel_end + 
+					   typed_text.substring(selection_start);
+		}
+		else
+		{
+			var typed_text_c = typed_text.substring(0, selection_start) + code_sel_start +
+			                   typed_text.substring(selection_start, selection_end) + code_sel_end + 
+					   "<span id = \"span_cursor\">" +
+					   cursor_symbol + "</span>" + typed_text.substring(selection_end);
+		}
+
+
+
+//		var typed_text_c = typed_text.substring(0, selection_end) + "<span class = \"selection\" id = \"span_cursor\">" +
+//				   cursor_symbol + "</span>" + typed_text.substring(selection_end);
+
+//		var typed_text_c = typed_text.substring(0, selection_end) + "<span id = \"span_cursor\">" +
+//				   cursor_symbol + "</span>" + typed_text.substring(selection_end);
 
 		// render for internal HTML
 		nline = 0;
 		html_text += "<span id = \"span_line_"+ nline + "\">";
 
 		var opening_glyph = 0, glyph_start, glyph_id;
+		var wrap_span;
 
 		for (i = 0; i < typed_text_c.length; i++)
 		{
 			if (typed_text_c.charAt(i) == '\n')
 			{
+				wrap_span = (nline >= line_sel_start && nline < line_sel_end);
+
+				if (wrap_span)
+				{
+					html_text += code_sel_end;		// close selection for multi-line selections
+				}
+
 				html_text += "</span><br>";
 				nline ++;
 				html_text += "<span id = \"span_line_"+ nline + "\">";
+
+				if (wrap_span)
+				{
+					html_text += code_sel_start;
+				}
 			}
 			if (typed_text_c.charAt(i) == '$')
 			{
