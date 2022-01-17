@@ -26,6 +26,10 @@ const up_one_level_narrow = "\u3014<b>\u21e7</b>\u3015";
 // if more cols than this const, use 'narrow' version of up_one_level
 const max_cols_for_full_caption = 6;		
 
+
+var max_chars_to_show = 8;	// don't display long dash if caption length exceeds this value, for 1st level of TOC
+
+
 function start_rus_dict()
 {
 	// simple wrapper
@@ -39,6 +43,20 @@ function start_eng_dict()
 	current_dictionary_level = 0;
 	realize_dict(0, "eng");
 }
+
+
+function start_cued_rus_dict()
+{
+	// simple wrapper
+	realize_cued_dict("rus");
+}
+
+function start_cued_eng_dict()
+{
+	// another simple wrapper
+	realize_cued_dict("eng");
+}
+
 
 
 
@@ -346,11 +364,11 @@ function type_chosen_word(current_word, lang)
 		return;
 	}
 
-	typeInTextarea(current_word, document.getElementById("my_text_field"));
+	typeInTextarea(current_word);
 
 	if (current_word.substring(current_word.length - 1) != "-")
 	{
-		typeInTextarea(" ", document.getElementById("my_text_field"));
+		typeInTextarea(" ");
 	}
 
 	// return to normal keyboard
@@ -440,27 +458,35 @@ function realize_dict(key_index, lang)
 
 	var last_toc_entry = 0, word_index_offset = 0, word_index;
 
+//	alert('dtoc.length = ' + dtoc.length.toString());
+
 	for (i = 0; i < dtoc.length; i++)
 	{
 		last_toc_entry += toc_choice[i] * toc_shift[i];
 	}
+
+//	alert('toc_choice[0] = ' + toc_choice[0].toString() + ', toc_shift[0] = ' + toc_shift[0].toString());
+
 	for (i = dtoc.length; i < max_toc_levels; i++)
 	{
 		word_index_offset += toc_choice[i] * toc_shift[i];
 	}
 
 	// find the last TOC entry
-	var first_word, last_word, prev_word;
-	if (last_toc_entry == 0)
+	var first_word = 0, last_word = dictionary.length, prev_word;
+	if (dtoc.length > 0)
 	{
-		first_word = 0;
-	}
-	else
-	{
-		first_word = dtoc[dtoc.length - 1][last_toc_entry - 1];
-	}
+		if (last_toc_entry == 0)
+		{
+			first_word = 0;
+		}
+		else
+		{
+			first_word = dtoc[dtoc.length - 1][last_toc_entry - 1];
+		}
 
-	last_word = dtoc[dtoc.length - 1][last_toc_entry];
+		last_word = dtoc[dtoc.length - 1][last_toc_entry];
+	}
 
 	//  [ first_word; last_word)
 
@@ -485,6 +511,9 @@ function realize_dict(key_index, lang)
 		return;
 	}
 
+//	alert('current_dictionary_level = ' + current_dictionary_level.toString());
+//	alert('last_word = ' + last_word.toString() + ', word_index = ' + word_index.toString());
+
 	// amount of keys
 	var key_num, key_num_alt;
 
@@ -495,8 +524,9 @@ function realize_dict(key_index, lang)
 		// key_num may be less than the maximum value...
 		key_num_alt = Math.ceil( (last_word - word_index) / toc_shift[current_dictionary_level - 1] );
 
+//		alert('key_num_alt = ' + key_num_alt.toString());
 	}
-	else if (current_dictionary_level == dtoc.length)
+	else if (current_dictionary_level == dtoc.length && dtoc.length >= 2)
 	{
 //		last_toc_entry += toc_choice[i] * toc_shift[i];
 		// single use case
@@ -511,7 +541,6 @@ function realize_dict(key_index, lang)
 				break;
 			}
 		}
-
 /*		if (key_num_alt < key_num)
 		{
 			alert('key_num_alt == ' + key_num_alt.toString());
@@ -525,6 +554,7 @@ function realize_dict(key_index, lang)
 //			alert('last_word = ' + last_word.toString() + ', word_index = ' + word_index.toString());
 	}
 
+//	alert('key_num == ' + key_num.toString());
 
 	if (key_num == 1)
 	{
@@ -553,6 +583,8 @@ function realize_dict(key_index, lang)
 	var bll = 0, tree_pos, caption, word1, word2, word2_prev, word1_ind, word2_ind, chars_to_show1, chars_to_show2, key_cap, args;
 	var ccol, crow;
 	caption = "";
+
+
 
 	chars_to_show2 = number_of_characters_to_show(dictionary[word_index], dictionary[first_word]);
 	word2 = dictionary[word_index];
@@ -604,15 +636,13 @@ function realize_dict(key_index, lang)
 
 			if (word2_ind - word1_ind > 1)
 			{
-				max_chars_to_show = 8;	// don't display long dash if caption length exceeds this value
-
 				caption = word1.substring(0, chars_to_show1);
-				if (chars_to_show1 <= max_chars_to_show || current_dictionary_level > 1)
+				if (chars_to_show1 <= max_chars_to_show || current_dictionary_level > 1 || dtoc.length == 0)
 				{
 					caption += ' \u2013 ';
 				}
 				caption += '<br/>';
-				if (chars_to_show2 <= max_chars_to_show || current_dictionary_level > 1)
+				if (chars_to_show2 <= max_chars_to_show || current_dictionary_level > 1 || dtoc.length == 0)
 				{
 					caption += ' \u2013 ';
 				}
@@ -641,6 +671,235 @@ function realize_dict(key_index, lang)
 	
 
 	return;
+}
+
+
+function parse_last_word(last_word)
+{
+	// try to parse the last_word
+	// <start_of_the_word><number_of_letters_in_the_word><end_of_the_word>
+	// if no numbers are specified, start_of_the_word is the entire 'last_word'
+
+	var i;
+	var start_of_the_word = "", number_of_letters = 0, end_of_the_word = "";
+	var first_digit = -1, last_digit = -1;
+
+	for (i = 0; i < last_word.length; i++)
+	{
+		if (is_numeric(last_word.charAt(i)))
+		{
+			if (first_digit < 0)
+			{
+				first_digit = i;
+			}
+			last_digit = i;
+		}
+	}
+
+	start_of_the_word = last_word;
+
+	if (first_digit >= 0)
+	{
+		start_of_the_word = last_word.substring(0, first_digit);
+		end_of_the_word = last_word.substring(last_digit + 1);
+		number_of_letters = parseInt(last_word.substring(first_digit, last_digit + 1));
+	}
+
+	if (isNaN(number_of_letters))
+	{
+		alert('parse_last_word error: invalid number');
+		return;
+	}
+
+//	alert('start_of_the_word = \"' + start_of_the_word + '\", number = ' + number_of_letters.toString() + ' , end_of_the_word = \"' + end_of_the_word + '\"');
+
+	return [start_of_the_word, number_of_letters, end_of_the_word];
+}
+
+
+
+function realize_cued_dict(lang)
+{  
+
+	if (lang != "rus" && lang != "eng")
+	{
+		alert ('realize_cued_dict: unknown language ' + lang);
+		return;
+	}
+
+	var last_word = get_last_word();
+//	alert('last word is: \"' + last_word + '\"');
+//	alert('selection_start = ' + selection_start.toString() + ', selection_end = ' + selection_end.toString());
+
+	if (last_word == "")
+	{
+		//nothing is typed
+		current_dictionary_level = 0;
+		realize_dict(0, lang);
+	}
+
+	// continue, assuming that the last_word is not empty
+
+	// try to parse the last_word
+	// <start_of_the_word><number_of_letters_in_the_word><end_of_the_word>
+	// if no numbers are specified, start_of_the_word is the entire 'last_word'
+
+	var i, j, k;
+
+	const [start_of_the_word, number_of_letters, end_of_the_word] = parse_last_word(last_word);
+
+	if (start_of_the_word == "" && end_of_the_word == "")
+	{
+		// do nothing
+		return;
+	}
+
+//	alert('start_of_the_word = \"' + start_of_the_word + '\", number = ' + number_of_letters.toString() + ' , end_of_the_word = \"' + end_of_the_word + '\"');
+
+	
+	// process the dictionary
+
+	if (lang == "rus")
+	{
+		// defined in "dict_rus.js"
+		init_rus_dict();
+	}
+	else
+	{
+		// defined in "dict_eng.js"
+		init_eng_dict();
+	}
+		
+	var entire_dict = dictionary;
+
+/*
+	max_toc_levels = 4;
+
+	max_entries_per_level = new Array(26, 23, 11, 5);
+
+	dict_columns = new Array(9, 8, 4, 2);
+
+	toc_entry_index = new Array(0, 0, 0, 0);
+
+	toc_choice = new Array(0, 0, 0, 0);
+
+	toc_shift = new Array(23, 1, 5, 1);
+*/
+
+	// find the number of matches
+
+	dictionary = new Array();
+	var cond1, cond2, cond3;
+	var start_compar = start_of_the_word.toLowerCase(), end_compar = end_of_the_word.toLowerCase();
+	
+	for (i = 0; i < entire_dict.length; i++)
+	{
+		// word has specified number of characters
+		cond1 = (entire_dict[i].length == number_of_letters || number_of_letters <= 0);
+
+		cond2 = entire_dict[i].substring(0, start_compar.length).toLowerCase() == start_compar;
+
+		cond3 = entire_dict[i].substring(entire_dict[i].length - end_compar.length).toLowerCase() == end_compar;
+
+		if ( cond1 && cond2 && cond3 )
+		{
+			dictionary[dictionary.length] = entire_dict[i];
+		}
+	}
+
+//	alert('Number of matches: ' + dictionary.length.toString());
+
+	if (dictionary.length == 0)
+	{
+		return;
+	}
+
+	// possible options for organizing a dictionary entry
+	var options_cols    = new Array(6, 4, 3, 2, 1);
+	var options_entries = [], rows = 4;
+
+	for (i = 0; i < options_cols.length; i++)
+	{
+		options_entries[i] = options_cols[i] * rows - 1;
+	}
+
+	dtoc = [];
+
+	var max_pages = 4;	// ... maximum number of dictionary pages
+	max_entries_per_level = [];
+	dict_columns = [];
+	toc_choice = [];
+	toc_shift = [];
+
+	var best_match, best_match_array = [];
+	var current_take, current_num, current_match;
+
+	// define dictionary pages
+	max_toc_levels = 1;
+	var i_rem, i_dig;
+	const big_value = 1000000;
+	for (k = 0; k < max_pages; k++)
+	{
+		best_match = big_value;
+		current_take = new Array(k + 1);
+		for (i = 0; i < options_cols.length ** (k + 1); i++)
+		{
+			i_rem = i;
+			current_num = 1;
+			current_match = 0;
+			for (j = 0; j <= k; j++)
+			{
+				i_dig = i_rem % options_cols.length;
+				i_rem = (i_rem - i_dig) / options_cols.length;
+				current_take[k - j] = i_dig;
+				current_num *= options_entries[i_dig];
+			}
+			current_match = current_num - dictionary.length;
+
+			if (current_match >= 0 && current_match < best_match)
+			{
+				best_match = current_match;
+				best_match_array = current_take.slice();	// copy of the array
+			}
+		}
+
+		if (best_match < big_value)
+		{	
+			max_toc_levels = k + 1;
+			break;
+		}
+
+	}
+
+//	alert('best_match = ' + best_match.toString() + ', array = ' + best_match_array);
+	dict_columns = [];
+	toc_choice = [];
+	toc_shift = [];
+	for( i = 0; i < max_toc_levels; i++)
+	{
+		dict_columns[i] = options_cols[best_match_array[i]];
+		max_entries_per_level[i] = options_entries[best_match_array[i]];
+		toc_choice[i] = 0;
+		toc_shift[i] = 1;
+		for (j = i + 1; j < max_toc_levels; j++)
+		{
+			toc_shift[i] *= options_entries[best_match_array[j]];
+		}
+	}
+
+
+//	dict_columns = [4];
+
+//	toc_choice = [0];
+
+//	toc_shift = [1];
+
+
+	current_dictionary_level = 2;
+
+//	alert('toc_shift[0] = ' + toc_shift[0].toString());
+
+	realize_dict(1, lang);
 }
 
 
