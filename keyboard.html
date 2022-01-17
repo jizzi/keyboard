@@ -259,12 +259,13 @@ div {
 	    new Kbd_Button("Key_3_9" ,       null,  tri('022201  '),  "\u044e",  "\u042e",        null,       null, null, null),	//	'\u044E'
 	    new Kbd_Button("Key_3_10",       null,  tri('1010    '), null, null,    "\u2190",   "\u2193", moveCursorLeft, moveCursorDown),		// "left",     "down",
 	    new Kbd_Button("Key_3_11",       null,  tri('1011    '), null, null,    "\u2192",   "\u2191", moveCursorRight, moveCursorUp),		// "right",      "up",
-	    new Kbd_Button("Key_3_12",       null,  tri('1020    '), null, null,      "\u0441\u043B\u043E\u0432\u043E",       null,    start_rus_dict, null),	
+	    new Kbd_Button("Key_3_12",       null,  tri('1020    '), null, null,      "\u0441\u043B\u043E\u0432\u043E",    "\u04415\u043E",    start_rus_dict, start_cued_rus_dict),	
                                                                
 	    new Kbd_Button("Key_4_0" ,       null,  tri('1200    '),  "$-1$", "$-2$", "SPACE", "TAB", null, null),
 	    new Kbd_Button("Key_4_1" ,       null,  tri('1021    '),  null, null, emoji_button, emoji_button, start_rus_emoji, start_rus_emoji)
 	    ];     
 	}
+
 
 
 	function init_button_list_eng()
@@ -327,7 +328,7 @@ div {
 	    new Kbd_Button("Key_3_10",       null,  tri('1010    '), null, null,    "\u2190",   "\u2193", moveCursorLeft, moveCursorDown),		// "left",     "down",
 	    new Kbd_Button("Key_3_11",       null,  tri('1011    '), null, null,    "\u2192",   "\u2191", moveCursorRight, moveCursorUp),		// "right",      "up",
 //	    new Kbd_Button("Key_3_12",       null,  tri('1012    '), null, null,        null,       null, null, null),			// early end, bit 6
-	    new Kbd_Button("Key_3_12",       null,  tri('10120   '), null, null,      "word",       null,  start_eng_dict, null),	
+	    new Kbd_Button("Key_3_12",       null,  tri('10120   '), null, null,      "word",       "w4d",  start_eng_dict, start_cued_eng_dict),
 
                                                                  
 	    new Kbd_Button("Key_4_0" ,       null,  tri('1202    '),  "$-1$", "$-2$", "SPACE", "TAB", null, null),
@@ -746,7 +747,7 @@ div {
 				}
 				else if (current_text != null)
 				{
-					typeInTextarea(current_text, document.getElementById("my_text_field"));
+					typeInTextarea(current_text);
 				}
 
 				// if SHIFT was active, and was not repeatedly pressed, inactivate SHIFT
@@ -779,7 +780,7 @@ div {
 
 //	const cursor_symbol  = "\u2026";			// horizontal ellipsis
 
-	function typeInTextarea(newText, el = document.activeElement) 
+	function typeInTextarea(newText) 
 	{
 		var start = selection_start;
 		var end = selection_end;
@@ -787,7 +788,8 @@ div {
 		const after  = typed_text.substring(end, typed_text.length);
 		typed_text = (before + newText + after);
 
-		selection_start = selection_end = start + newText.length;
+		selection_end = start + newText.length;
+		selection_start = selection_end;
 
 		renderTextToInnerHTML();
 	}
@@ -842,7 +844,8 @@ div {
 		const after  = typed_text.substring(end, typed_text.length);
 		typed_text = (before + after);
 
-		selection_start = selection_end = start;
+		selection_end = start;
+		selection_start = start;
 
 
 		renderTextToInnerHTML();
@@ -904,8 +907,55 @@ div {
 
 	}
 
+	function is_alphanumeric(chr)
+	{
+		// chr is a character
+		return (chr >= '0' && chr <= '9') || (chr >= 'A' && chr <= 'Z') || (chr >= 'a' && chr <= 'z') ||
+//		       (chr >= "\u0430" && chr <= "\u044f") && (chr >= "\u0410" && chr <= "\u042f");
+		       (chr >= "\u0410" && chr <= "\u044f") && (chr != "\u0401") && (chr != "\u0451");
 
-	function moveCursor(el, direction)
+	
+	}
+
+	function is_numeric(chr)
+	{
+		// chr is a character
+		return (chr >= '0' && chr <= '9') ;
+
+	
+	}
+
+
+	function get_last_word()
+	{
+		// the function retrieves the last word before the cursor
+		// and selects it
+		var right = selection_end, left;
+		left = 0;
+		var i;
+
+		i = right - 1;
+		if (i >= 0)
+		{
+			for (; i >= 0; i --)
+			{
+				if (! is_alphanumeric(typed_text.charAt(i)))
+				{
+					left = i + 1;
+					break;
+				}
+			}
+		}
+
+		selection_start = left;
+
+//		alert('left = ' + left.toString());
+//		alert('selection_start = ' + selection_start.toString());
+		return typed_text.substring(left, right);
+	}
+
+
+	function moveCursor(direction)
 	{
 		var start = selection_start;
 		var end = selection_end;
@@ -1103,22 +1153,22 @@ div {
 
 	function moveCursorLeft()
 	{
-		moveCursor(document.getElementById("my_text_field"), "left");
+		moveCursor("left");
 	}
 
 	function moveCursorRight()
 	{
-		moveCursor(document.getElementById("my_text_field"), "right");
+		moveCursor("right");
 	}
 
 	function moveCursorUp()
 	{
-		moveCursor(document.getElementById("my_text_field"), "up");
+		moveCursor("up");
 	}
 
 	function moveCursorDown()
 	{
-		moveCursor(document.getElementById("my_text_field"), "down");
+		moveCursor("down");
 	}
 
 	
