@@ -50,6 +50,33 @@ function get_HTML_from_glyph_id(glyph_id, emoji_height)
 }
 
 
+function get_alt_text_from_glyph_id(glyph_id)
+{
+	//
+
+	//"<img alt=\"qq\" height = \"32\" src=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEgAAABICAMAAABiM0N1AAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAABgUExURUdwTAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP/JOv///wsHAPbCN+CwMnRaFItsG/b29josBqaCIsabK+66NR4YDVhEDSceC+Hh4ZeXl1FRUYSEhIqNDVcAAAAMdFJOUwDKcVsQsN3wigMhO1J3aLkAAAKXSURBVFjD7ZjJYoMgEIajiaIGCkjcbfv+b1nBNDosginH/occiPnCrAxeLv/6k6prkSUIYYxQkhXX6j3Kvcixpry4n6XcUoPyZKW3M5gCYadQEYoq0xemqduOM0IY79q6eaHSMgRTJc/nx3ZB7MXa8flVEuD367odKnpiUS/ouqmrbz/F+peCEYeYWJ8oDs0rs9U1nByIr87KSi9HEI9aD2nl0I541dFDkvLPwEmA+KT85IiX4vQkSL0iWWNXybhTTgLFpXXIkk+lysOOBKtTmWm6KVVZSE5IxS416lQa1pBTkvmEbraI8XMgbomc2pAgJyXMLSkPsbMgRg0v5dqGWE1pbYCNVbmlHPRnae0+FWu5UNtMAau9XLhrrh73P1m7jg5Sq3S/Mmrulpa1+wewFWSuttC2SrcsGMTkQgXKtSHvgFRSXoGL6vdANXBSprso2NnKSdkLlBh1Hxj+tQckIGj8OPVcq7Le0AuE9KCdqBIAkraz90AqAPFB0UyDzsYBcjgbhv8UCIYfJqR88GOR+3MHggkJS4T6QdRRIrBoJz9ochQtbCOjHzQ62ghsbMIPEo7GBlutjOhjkftzyxW91cLm3/iC3zibPzyOWh+odR5H2gE54W+3j763mFkOSHhkL+k6u0DzrggsR7Y2RNR4mO2geYBRMcY/ONawBk+zDTRPuGGHY43y0mbcMiIONtCAp/540FpbwDYa9/LvHhAkM6jpfaOfPoyypRyHz8cGenwue9xav3MYNcfjTlbvl9yXzOYvWatb0+oH53hsGdhbkOPN7gzlw8HAbrtCcDFOiw10GgUPv0JEu9RcyljXrHgXv3hXUZlPkS7HslqiXNcjvkCI+Eoj4kuW3WufHFGK8j+89vnXr34A0u2o0w8ZGFIAAAAASUVORK5CYII=\">";
+	var __FOUND = emoji_list.findIndex(
+						function(group_item, index) 
+						{
+							if(group_item.uni_id == glyph_id)
+							return true;
+						}
+					  );	
+
+	if (__FOUND == -1)
+	{
+		alert('Error in \'get_alt_text_from_glyph_id\', cannot find glyph from id, id = ' + glyph_id.toString());
+	}
+
+	var alt_text;
+
+	alt_text = "<" + emoji_list[__FOUND].emoji_name + ">";
+
+	return alt_text;
+}
+
+
+
 /*
 function second_level_emoji_group_item(group_name, columns, rus_title, eng_title)
 {
@@ -296,6 +323,7 @@ function populate_emoji_toc()
 function start_rus_emoji()
 {
 	// simple wrapper
+	current_interface = "emoji";
 	current_emoji_level = 0;
 	realize_emoji_table(0, "rus");
 }
@@ -304,6 +332,7 @@ function start_rus_emoji()
 function start_eng_emoji()
 {
 	// simple wrapper
+	current_interface = "emoji";
 	current_emoji_level = 0;
 	realize_emoji_table(0, "eng");
 }

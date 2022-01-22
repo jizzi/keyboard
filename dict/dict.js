@@ -33,6 +33,7 @@ var max_chars_to_show = 8;	// don't display long dash if caption length exceeds 
 function start_rus_dict()
 {
 	// simple wrapper
+	current_interface = "dict1";
 	current_dictionary_level = 0;
 	realize_dict(0, "rus");
 }
@@ -40,6 +41,7 @@ function start_rus_dict()
 function start_eng_dict()
 {
 	// another simple wrapper
+	current_interface = "dict1";
 	current_dictionary_level = 0;
 	realize_dict(0, "eng");
 }
@@ -48,12 +50,14 @@ function start_eng_dict()
 function start_cued_rus_dict()
 {
 	// simple wrapper
+	current_interface = "dict2";
 	realize_cued_dict("rus");
 }
 
 function start_cued_eng_dict()
 {
 	// another simple wrapper
+	current_interface = "dict2";
 	realize_cued_dict("eng");
 }
 
