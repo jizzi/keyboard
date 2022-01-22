@@ -48,6 +48,10 @@ Lastly, I should add, that in case you have successfully managed to communicate 
 
 * * *
 
-The link to the software:
+The link to the software (default Russian layout):
 
-https://rawcdn.githack.com/jizzi/keyboard/e043e329b810a7a36023f554f32a7f55f22b6eef/keyboard.html
+https://rawcdn.githack.com/jizzi/keyboard/5fd026b3d57227e830322d26ea0579b53eb4187f/keyboard.html
+
+Same, with default English layout:
+
+https://rawcdn.githack.com/jizzi/keyboard/5fd026b3d57227e830322d26ea0579b53eb4187f/keyboard_eng.html
