@@ -52,7 +52,7 @@ A brief description of the features.
 
 "**SAVE**" is currently not implemented. Does nothing. The idea is to provide an option to save/load any parts of the text.
 
-"**Heart**" emoji key allows you to choose an emoji and type it.
+"**Heart**" emoji key allows to choose an emoji and type it.
 
 "**word**" key ("слово" in Russian layout) allows to choose a dictionary word and type it. Since the amount of words exceeds 30 thousands, the dictionary feature consists of several pages, each of which allows you to select a range.
 
