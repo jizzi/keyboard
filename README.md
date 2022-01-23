@@ -84,8 +84,8 @@ Third, the 6 keys in the bottom-right allow you to work with selections. The key
 
 The link to the software (default Russian layout):
 
-https://rawcdn.githack.com/jizzi/keyboard/5fd026b3d57227e830322d26ea0579b53eb4187f/keyboard.html
+https://rawcdn.githack.com/jizzi/keyboard/84ab53bf04bd182fbfb90e749758852d5964c7ac/keyboard.html
 
 Same, with default English layout:
 
-https://rawcdn.githack.com/jizzi/keyboard/5fd026b3d57227e830322d26ea0579b53eb4187f/keyboard_eng.html
+https://rawcdn.githack.com/jizzi/keyboard/84ab53bf04bd182fbfb90e749758852d5964c7ac/keyboard_eng.html
