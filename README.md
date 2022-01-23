@@ -48,6 +48,30 @@ Lastly, I should add, that in case you have successfully managed to communicate 
 
 * * *
 
+A brief description of the features.
+
+"**SAVE**" is currently not implemented. Does nothing. The idea is to provide an option to save/load any parts of the text.
+
+"**Heart**" emoji key allows you to choose an emoji and type it.
+
+"**word**" key ("слово" in Russian layout) allows to choose a dictionary word and type it. Since the amount of words exceeds 30 thousands, the dictionary feature consists of several pages, each of which allows you to select a range.
+
+What if you do not need every word in a dictionary, but, say, just words starting from "b", ending with "c", and having 9 letters? In that case, just type "b", "9", "c", then press "SHIFT" key, and now instead of the "word" key you have "w4d" key. Press it. Now the dictionary consists only of words matching your cue — which would be "*ballistic*", "*biometric*", "*bishopric*" and "*bombastic*".
+
+What options are allowed? You can skip the number. If you skip it altogether, you'll see a list of words starting with your cue. For example, pressing the keys "z", "y", "SHIFT", "w4d", will get you the only word starting with "zy" — which is "*zygote*".
+
+If you type "0" instead of a positive number, the number of letters is ignored. For example, "t", "0", "c", "t", "SHIFT", "w4d", will get you words starting with "t" and ending with "ct", which are "*tact*", "*tract*", "*transact*" and "*Trade Descriptions Act*".
+
+"**pos**" allows you to edit the text. In principle, you can already move the cursor using the arrow keys ("left" and "right" keys on the main keyboard, which become "up" and "down" keys if you press "SHIFT"), as well as remove text using "BKSP" key (which becomes "DEL" when you press shift). What does the "pos" feature allow you to do? If you choose it, you can see it consists roughly of three parts.
+
+First, "copy", "paste" and "cut". "Copy" allows you to copy the selected text into the clipboard. "Paste" allows you to paste the text from the clipboard (replacing the selected text, if any). "Cut" allows to cut the selected text, moving it to the clipboard.
+
+Second, the ten keys in the bottom-left allow to either move the cursor, or move the selection. The possible movements include, "Home" and "End" — beginning and end of the current string. "PgUp" and "PgDn" — move 7 strings above or below. Arrow keys — move up, down, left or right. And double arrows — move one word left or one word right. With the exception of "Home" and "End" keys, all other keys in this group allow to be pressed continually. Say, if you need to move 10 characters to the left, or 5 words to the right, or 7 pages up, you can just press the selected key repeatedly. To exit this mode, press the key "Exit from moving cursor mode".
+
+Third, the 6 keys in the bottom-right allow you to work with selections. The key "Select text" allows you to select the text. To return to moving the cursor, press the key again — now it will read "Move cursor". Note, that while any text is selected, moving the cursor will also keep and move the selection (that is, any text between the cursor and the start of the selection). Other keys in the group are "Clear selection" and "Select all" — to either clear the selection or make everything selected. The key "Select word" allows to select the word at the position of the cursor. Finally, the keys "Text start" and "Text end" move to either the start or the end of the text. Depending on the mode, these keys will move either the cursor or the selection edge. In standard text editors, these keys would be just Ctrl+Home or Ctrl+End.
+
+* * *
+
 The link to the software (default Russian layout):
 
 https://rawcdn.githack.com/jizzi/keyboard/5fd026b3d57227e830322d26ea0579b53eb4187f/keyboard.html
