@@ -8,7 +8,7 @@ function realize_pos_keyboard(lang)
 {
 	// realize keyboard for positioning the cursor, selecting text and more
 	move_select_state = 0;
-	stop_handle = 0;
+	stop_handle = "";
 
 	init_pos_keyboard();
 
@@ -420,7 +420,7 @@ function convert_to_internal_text(in_text)
 									}
 								  );	
 				
-				var html_code = "&lt;" + glyph_name + "&gt;";
+				var html_code = "$-3$" + glyph_name + "$-4$";
 
 				if (__FOUND != -1)
 				{
@@ -594,6 +594,9 @@ function solitary_move(args)
 					*/
 
 					interface_for_pasting_data(lang);
+
+//					renderTextToInnerHTML();
+					return;
 				}
 
 				break;
@@ -649,10 +652,19 @@ function solitary_move(args)
 
 		case "select_word":
 //				selection_start = selection_end;
+
 				pos = selection_end - 1;
 				if (pos < 0)
 				{
 					pos = 0;
+				}
+
+				if (typed_text.charAt(pos) == "$")
+				{
+					// leave anything like it was,
+					// just clear the selection
+					selection_start = selection_end;
+					break;
 				}
 
 				pos2 = pos;
@@ -736,15 +748,12 @@ function solitary_move(args)
 
 //	alert('selection_start = ' + selection_start.toString() + ', selection_end = ' + selection_end.toString());
 
-	// key management part
-
 	if (stop_handle != "")
 	{
 		stop_handle = "";
 		init_pos_button_list(lang, 1);
 		update_table(1);
 	}
-	
 }
 
 
@@ -794,6 +803,13 @@ function paste_data (data)
 
 function interface_for_pasting_data(lang)
 {
+	if (lang != "rus" && lang != "eng")
+	{
+		alert ('interface_for_pasting_data: unknown language ' + lang);
+		return;
+	}
+
+
 	current_interface = "paste";
 
 	// can be called from pos interface...
@@ -845,6 +861,7 @@ function retrieve_pasted_data(args)
 		paste_data(myarea.value);
 	}
 
-	realize_normal_keyboard(lang);
+//	realize_normal_keyboard(lang);
+	realize_pos_keyboard(lang);
 }
 
