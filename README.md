@@ -50,9 +50,15 @@ Lastly, I should add, that in case you have successfully managed to communicate 
 
 A brief description of the features.
 
+1.
+
 "**SAVE**" is currently not implemented. Does nothing. The idea is to provide an option to save/load any parts of the text.
 
+2.
+
 "**Heart**" emoji key allows to choose an emoji and type it.
+
+3.
 
 "**word**" key ("слово" in Russian layout) allows to choose a dictionary word and type it. Since the amount of words exceeds 30 thousands, the dictionary feature consists of several pages, each of which allows you to select a range.
 
@@ -63,6 +69,8 @@ What if you do not need every word in a dictionary, but, say, just words startin
 What options are allowed? You can skip the number. If you skip it altogether, you'll see a list of words starting with your cue. For example, pressing the keys "z", "y", "SHIFT", "w4d", will get you the only word starting with "zy" — which is "*zygote*".
 
 If you type "0" instead of a positive number, the number of letters is ignored. For example, "t", "0", "c", "t", "SHIFT", "w4d", will get you words starting with "t" and ending with "ct", which are "*tact*", "*tract*", "*transact*" and "*Trade Descriptions Act*".
+
+4.
 
 "**pos**" allows you to edit the text. In principle, you can already move the cursor using the arrow keys ("left" and "right" keys on the main keyboard, which become "up" and "down" keys if you press "SHIFT"), as well as remove text using "BKSP" key (which becomes "DEL" when you press shift). What does the "pos" feature allow you to do? If you choose it, you can see it consists roughly of three parts.
 
