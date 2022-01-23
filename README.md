@@ -56,6 +56,8 @@ A brief description of the features.
 
 "**word**" key ("слово" in Russian layout) allows to choose a dictionary word and type it. Since the amount of words exceeds 30 thousands, the dictionary feature consists of several pages, each of which allows you to select a range.
 
+It's useful, but sometimes it's hard to choose a word, leaving you wandering among various dictionary pages, hardly settling on anything. So, a cued dictionary option has been implemented.
+
 What if you do not need every word in a dictionary, but, say, just words starting from "b", ending with "c", and having 9 letters? In that case, just type "b", "9", "c", then press "SHIFT" key, and now instead of the "word" key you have "w4d" key. Press it. Now the dictionary consists only of words matching your cue — which would be "*ballistic*", "*biometric*", "*bishopric*" and "*bombastic*".
 
 What options are allowed? You can skip the number. If you skip it altogether, you'll see a list of words starting with your cue. For example, pressing the keys "z", "y", "SHIFT", "w4d", will get you the only word starting with "zy" — which is "*zygote*".
