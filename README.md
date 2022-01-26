@@ -74,7 +74,7 @@ If you type "0" instead of a positive number, the number of letters is ignored. 
 
 "**pos**" allows you to edit the text. In principle, you can already move the cursor using the arrow keys ("left" and "right" keys on the main keyboard, which become "up" and "down" keys if you press "SHIFT"), as well as remove text using "BKSP" key (which becomes "DEL" when you press shift). What does the "pos" feature allow you to do? If you choose it, you can see it consists roughly of three parts.
 
-First, "copy", "paste" and "cut". "Copy" allows you to copy the selected text into the clipboard. "Paste" allows you to paste the text from the clipboard (replacing the selected text, if any). "Cut" allows to cut the selected text, moving it to the clipboard.
+First, "Copy", "Paste" and "BackSpace". "Copy" allows you to copy the selected text into the clipboard. "Paste" allows you to paste the text from the clipboard (replacing the selected text, if any). "BackSpace" is the same as "BKSP" on the main keyboard, except that it can be pressed repeatedly.
 
 Second, the ten keys in the bottom-left allow to either move the cursor, or move the selection. The possible movements include, "Home" and "End" — beginning and end of the current string. "PgUp" and "PgDn" — move 7 strings above or below. Arrow keys — move up, down, left or right. And double arrows — move one word left or one word right. With the exception of "Home" and "End" keys, all other keys in this group allow to be pressed continually. Say, if you need to move 10 characters to the left, or 5 words to the right, or 7 pages up, you can just press the selected key repeatedly. To exit this mode, press the key "Exit from moving cursor mode".
 
@@ -84,8 +84,8 @@ Third, the 6 keys in the bottom-right allow you to work with selections. The key
 
 The link to the software (default Russian layout):
 
-https://rawcdn.githack.com/jizzi/keyboard/84ab53bf04bd182fbfb90e749758852d5964c7ac/keyboard.html
+https://rawcdn.githack.com/jizzi/keyboard/c3f311cfb90483355442a711ef31feab665fed12/keyboard.html
 
 Same, with default English layout:
 
-https://rawcdn.githack.com/jizzi/keyboard/84ab53bf04bd182fbfb90e749758852d5964c7ac/keyboard_eng.html
+https://rawcdn.githack.com/jizzi/keyboard/c3f311cfb90483355442a711ef31feab665fed12/keyboard_eng.html
