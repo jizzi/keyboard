@@ -839,7 +839,7 @@ div {
 		renderTextToInnerHTML();
 	}
 
-	function deletingInTextarea(el, num_backspace, num_del) 
+	function deletingInTextarea(num_backspace, num_del) 
 	{
 		var start = selection_start;
 		var end = selection_end;
@@ -908,12 +908,12 @@ div {
 
 	function backspaceInTextarea() 
 	{
-		deletingInTextarea(document.getElementById("my_text_field"), 1, 0);
+		deletingInTextarea(1, 0);
 	}
 
 	function delInTextarea() 
 	{
-		deletingInTextarea(document.getElementById("my_text_field"), 0, 1);
+		deletingInTextarea(0, 1);
 	}
 
 	function crawl_through_string(str, loc_count)
