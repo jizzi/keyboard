@@ -8,7 +8,7 @@ function realize_pos_keyboard(lang)
 {
 	// realize keyboard for positioning the cursor, selecting text and more
 	move_select_state = 0;
-	stop_handle = "";
+	stop_handle = 0;
 
 	init_pos_keyboard();
 
@@ -66,7 +66,7 @@ function init_pos_button_list(lang, update = 0)
 		cap_exit = "Exit";
 		cap_copy = "Copy";
 		cap_paste = "Paste";
-		cap_cut = "Cut";
+//		cap_cut = "Cut";
 		cap_stop1 = "Exit from moving cursor mode";
 		cap_stop2 = "Exit from text selection mode";
 		cap_select1 = "Select text";
@@ -82,7 +82,7 @@ function init_pos_button_list(lang, update = 0)
 		cap_exit = "\u0412\u044B\u0445\u043E\u0434";
 		cap_copy = "\u041A\u043E\u043F\u0438\u0440\u043E\u0432\u0430\u0442\u044C";
 		cap_paste = "\u0412\u0441\u0442\u0430\u0432\u0438\u0442\u044C";
-		cap_cut = "\u0412\u044B\u0440\u0435\u0437\u0430\u0442\u044C";
+//		cap_cut = "\u0412\u044B\u0440\u0435\u0437\u0430\u0442\u044C";
 		cap_stop1 = "\u0412\u044B\u0439\u0442\u0438 \u0438\u0437 \u0440\u0435\u0436\u0438\u043C\u0430 \u0443\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u0438\u044F \u043A\u0443\u0440\u0441\u043E\u0440\u043E\u043C";
 		cap_stop2 = "\u0412\u044B\u0439\u0442\u0438 \u0438\u0437 \u0440\u0435\u0436\u0438\u043C\u0430 \u0432\u044B\u0434\u0435\u043B\u0435\u043D\u0438\u044F \u0442\u0435\u043A\u0441\u0442\u0430";
 		cap_select1 = "\u0412\u044B\u0434\u0435\u043B\u0438\u0442\u044C \u0442\u0435\u043A\u0441\u0442";
@@ -100,7 +100,7 @@ function init_pos_button_list(lang, update = 0)
 		    new Kbd_Button("Key_0_0" , null,  tri(' 00      '), null, null,  cap_exit,         cap_exit,         realize_normal_keyboard, realize_normal_keyboard, lang, lang),
 		    new Kbd_Button("Key_0_1" , null,  tri(' 010     '), null, null,  cap_copy,         cap_copy,         solitary_move,  solitary_move, [lang, "copy"],        [lang, "copy"]),
 		    new Kbd_Button("Key_0_2" , null,  tri(' 011     '), null, null,  cap_paste,        cap_paste,        solitary_move,  solitary_move, [lang, "paste"],       [lang, "paste"]),
-		    new Kbd_Button("Key_0_3" , null,  tri(' 012     '), null, null,  cap_cut,          cap_cut,          solitary_move,  solitary_move, [lang, "cut"],         [lang, "cut"]),
+		    new Kbd_Button("Key_0_3" , null,  tri(' 0120    '), null, null,  "BackSpace",      "BackSpace",      sticky_move,    sticky_move,   [lang, "BKSP"],        [lang, "BKSP"]),
 		    new Kbd_Button("Key_1_0" , null,  tri('10       '), null, null,  cap_stop1,        cap_stop1,        solitary_move,  solitary_move, [lang, "stop"],        [lang, "stop"]),
 		    new Kbd_Button("Key_1_1" , null,  tri(' 20      '), null, null,  cap_select1,      cap_select1,      move_or_select, move_or_select, lang,                  lang),
 		    new Kbd_Button("Key_2_0" , null,  tri(' 102     '), null, null,  "Home",           "Home",           solitary_move,  solitary_move, [lang, "home"],        [lang, "home"]),
@@ -173,6 +173,10 @@ function init_pos_button_list(lang, update = 0)
 					break;
 			case "Right2":
 					button_list[ind_stop].number = tri(' 1211    ');
+					break;
+
+			case "BKSP":
+					button_list[ind_stop].number = tri(' 0121    ');
 					break;
 
 			default:
@@ -273,6 +277,10 @@ function sticky_move(args)
 					[chr, pos] = moveCursor("right", mode);
 				}
 				while( is_alphanumeric(chr) && pos < typed_text.length );
+				break;
+
+		case "BKSP":
+				deletingInTextarea(1, 0);	// 1 Backspace, 0 Dels
 				break;
 
 		default:
@@ -420,7 +428,7 @@ function convert_to_internal_text(in_text)
 									}
 								  );	
 				
-				var html_code = "$-3$" + glyph_name + "$-4$";
+				var html_code = "&lt;" + glyph_name + "&gt;";
 
 				if (__FOUND != -1)
 				{
@@ -594,9 +602,6 @@ function solitary_move(args)
 					*/
 
 					interface_for_pasting_data(lang);
-
-//					renderTextToInnerHTML();
-					return;
 				}
 
 				break;
@@ -652,19 +657,10 @@ function solitary_move(args)
 
 		case "select_word":
 //				selection_start = selection_end;
-
 				pos = selection_end - 1;
 				if (pos < 0)
 				{
 					pos = 0;
-				}
-
-				if (typed_text.charAt(pos) == "$")
-				{
-					// leave anything like it was,
-					// just clear the selection
-					selection_start = selection_end;
-					break;
 				}
 
 				pos2 = pos;
@@ -748,12 +744,15 @@ function solitary_move(args)
 
 //	alert('selection_start = ' + selection_start.toString() + ', selection_end = ' + selection_end.toString());
 
+	// key management part
+
 	if (stop_handle != "")
 	{
 		stop_handle = "";
 		init_pos_button_list(lang, 1);
 		update_table(1);
 	}
+	
 }
 
 
@@ -803,13 +802,6 @@ function paste_data (data)
 
 function interface_for_pasting_data(lang)
 {
-	if (lang != "rus" && lang != "eng")
-	{
-		alert ('interface_for_pasting_data: unknown language ' + lang);
-		return;
-	}
-
-
 	current_interface = "paste";
 
 	// can be called from pos interface...
@@ -861,7 +853,6 @@ function retrieve_pasted_data(args)
 		paste_data(myarea.value);
 	}
 
-//	realize_normal_keyboard(lang);
-	realize_pos_keyboard(lang);
+	realize_normal_keyboard(lang);
 }
 
