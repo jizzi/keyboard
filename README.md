@@ -64,11 +64,15 @@ A brief description of the features.
 
 It's useful, but sometimes it's hard to choose a word, leaving you wandering among various dictionary pages, hardly settling on anything. So, a cued dictionary option is provided.
 
-What if you do not need every word in a dictionary, but, say, just words starting from "b", ending with "c", and having 9 letters? In that case, just type "b", "9", "c", then press "SHIFT" key, and now instead of the "word" key you have "w4d" key. Press it. Now the dictionary consists only of words matching your cue — which would be "*ballistic*", "*biometric*", "*bishopric*" and "*bombastic*".
+The cued option appears when you type in an expression narrowing the word search, then choose the "word" key. The expression may consist of the beginning of the word, number of letters (including spaces), and the end of the word. It's possible to omit either the beginning of the word, the end of the word, or both the number of letters and the end of the word. If the number of letters is zero, it's ignored, so it's a way to omit it, too.
 
-What options are allowed? You can skip the number. If you skip it altogether, you'll see a list of words starting with your cue. For example, pressing the keys "z", "y", "SHIFT", "w4d", will get you the only word starting with "zy" — which is "*zygote*".
+For example, what if you need only words starting from "b", ending with "c", and having 9 letters? In that case, just type "b", "9", "c", press "word" key, then choose "Cued" option. Now the dictionary consists only of words matching your cue — which would be "*ballistic*", "*biometric*", "*bishopric*" and "*bombastic*".
 
-If you type "0" instead of a positive number, the number of letters is ignored. For example, "t", "0", "c", "t", "SHIFT", "w4d", will get you words starting with "t" and ending with "ct", which are "*tact*", "*tract*", "*transact*" and "*Trade Descriptions Act*".
+If you skip the number of letters, you'll see a list of words starting with your cue. For example, pressing the keys "z", "y", "word", "Cued", will get you the only word starting with "zy" — which is "*zygote*".
+
+If you type "0" instead of a positive number, the number of letters is ignored. For example, "t", "0", "c", "t", "word", "Cued", will get you words starting with "t" and ending with "ct", which are "*tact*", "*tract*", "*transact*" and "*Trade Descriptions Act*".
+
+Another example, "0", "o", "word", "Cued" will get you the words of any length, ending with "o".
 
 4.
 
