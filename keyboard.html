@@ -54,9 +54,8 @@ div {
 
 <script>
 
-//	?
-//	overflow-x: visible;
-//	overflow-wrap: break-word;
+	// Version
+	const current_version = "1.00";
 
 	// approximate settings for table cell widths
 	// for table_spans, 2 is an usual "square" key
@@ -119,7 +118,7 @@ div {
 	var last_touch_id = [];
 
 	// which interface is currently realized:
-	// "normal", "pos", "paste", "dict1", "dict2", "emoji"
+	// "normal", "pos", "paste", "dict_any", "dict_normal", "dict_cued", "emoji"
 	var current_interface = "";
 
 	// in "typed_text" string,
@@ -179,15 +178,13 @@ div {
 
 	function init_main_keyboard()
 	{
-		table_spans = [	2,   2, 2, 2, 2, 2,  2, 2, 2, 2, 2,  2, 2,  4,  0,			// 14 keys, sum_spans = 30
-				3,   2, 2, 2, 2, 2,  2, 2, 2, 2, 2,  2, 2,  3,  0,			// 14 keys
-				4,   2, 2, 2, 2, 2,  2, 2, 2, 2, 2,  2, 2,  2,  0,			// 13 keys (Enter -> -1)
-				5,   2, 2, 2, 2, 2,  2, 2, 2, 2, 2,  2, 3,  0,				// 13 keys
-				26.4,  1.8, 1.8, 0  /*,							// 2 keys, total of 56
-				1, 1, 1, 1,   1, 1, 1, 1, 0,
-				1, 1, 1, 1,   1, 1, 1, 1, 0,
-				1, 1, 1, 1,   1, 1, 1, 1, 0,
-				1, 1, 1, 1,   1, 1, 1, 1, 0	*/
+		table_spans = [	
+				 2,     2,   2,   2, 2, 2,  2, 2, 2, 2, 2,  2, 2,  4,  0,			// 14 keys, sum_spans = 30
+				 3,     2,   2,   2, 2, 2,  2, 2, 2, 2, 2,  2, 2,  3,  0,			// 14 keys
+				 4,     2,   2,   2, 2, 2,  2, 2, 2, 2, 2,  2, 2,  2,  0,			// 13 keys (Enter -> -1)
+				 5,     2,   2,   2, 2, 2,  2, 2, 2, 2, 2,  2, 3,  0,				// 13 keys
+				 26.4,  1.8, 1.8, 0 								// 3 keys, total of 57
+//				 , 1, 0
 		  	      ];
 
 		
@@ -273,11 +270,13 @@ div {
 	    new Kbd_Button("Key_3_9" ,       null,  tri('022201  '),  "\u044e",  "\u042e",        null,       null, null, null),	//	'\u044E'
 	    new Kbd_Button("Key_3_10",       null,  tri('1010    '), null, null,    "\u2190",   "\u2193", moveCursorLeft, moveCursorDown),		// "left",     "down",
 	    new Kbd_Button("Key_3_11",       null,  tri('1011    '), null, null,    "\u2192",   "\u2191", moveCursorRight, moveCursorUp),		// "right",      "up",
-	    new Kbd_Button("Key_3_12",       null,  tri('1020    '), null, null,      "\u0441\u043B\u043E\u0432\u043E",    "\u04415\u043E",    start_rus_dict, start_cued_rus_dict),	
+	    new Kbd_Button("Key_3_12",       null,  tri('1020    '), null, null,      "\u0441\u043B\u043E\u0432\u043E",    "\u0441\u043B\u043E\u0432\u043E",    start_any_dict, start_any_dict, "rus", "rus"),	
                                                                
 	    new Kbd_Button("Key_4_0" ,       null,  tri('1200    '),  "$-1$", "$-2$", "SPACE", "TAB", null, null),
 	    new Kbd_Button("Key_4_1" ,       null,  tri('1021    '),  null, null, emoji_button, emoji_button, start_rus_emoji, start_rus_emoji),
 	    new Kbd_Button("Key_4_2" ,       null,  tri('1022    '),  null, null,    "pos",       "pos",    realize_pos_keyboard,     realize_pos_keyboard,  "rus", "rus")
+
+//	   ,new Kbd_Button("Key_5_0" ,       null,  tri('10221   '),  null, null,    "temp",      "temp",   test_dict,     test_dict,  "rus", "rus")
 	    ];     
 	}
 
@@ -343,7 +342,7 @@ div {
 	    new Kbd_Button("Key_3_10",       null,  tri('1010    '), null, null,    "\u2190",   "\u2193", moveCursorLeft, moveCursorDown),		// "left",     "down",
 	    new Kbd_Button("Key_3_11",       null,  tri('1011    '), null, null,    "\u2192",   "\u2191", moveCursorRight, moveCursorUp),		// "right",      "up",
 //	    new Kbd_Button("Key_3_12",       null,  tri('1012    '), null, null,        null,       null, null, null),			// early end, bit 6
-	    new Kbd_Button("Key_3_12",       null,  tri('1020    '), null, null,      "word",       "w4d",  start_eng_dict, start_cued_eng_dict),
+	    new Kbd_Button("Key_3_12",       null,  tri('1020    '), null, null,      "word",       "word",  start_any_dict, start_any_dict, "eng", "eng"),
 
                                                                  
 	    new Kbd_Button("Key_4_0" ,       null,  tri('1202    '),  "$-1$", "$-2$", "SPACE", "TAB", null, null),
@@ -977,10 +976,11 @@ div {
 	}
 
 
-	function get_last_word()
+	function get_last_word(change_selection = 1)
 	{
 		// the function retrieves the last word before the cursor
 		// and selects it
+		// if change_selection != 0, then also change the selection (default behavior)
 		var right = selection_end, left;
 		left = 0;
 		var i;
@@ -998,12 +998,15 @@ div {
 			}
 		}
 
-		selection_start = left;
+		if (change_selection != 0)
+		{
+			selection_start = left;
 
-//		alert('left = ' + left.toString());
-//		alert('selection_start = ' + selection_start.toString());
-		// render selection...
-		renderTextToInnerHTML();
+//			alert('left = ' + left.toString());
+//			alert('selection_start = ' + selection_start.toString());
+			// render selection...
+			renderTextToInnerHTML();
+		}
 
 		return typed_text.substring(left, right);
 	}
@@ -1777,7 +1780,7 @@ div {
 		}
 		else
 		{
-			alert('unknown language ' + lang);
+			alert('realize_normal_keyboard: unknown language ' + lang);
 		}
 
 //		alert(factor_2_3(65536));
@@ -1828,6 +1831,48 @@ div {
 	document.addEventListener("keydown", process_keydown);
 
 	document.addEventListener("paste", process_paste);
+
+
+	/*
+	function test_dict()
+	{
+		var my_cell = document.getElementById("Key_5_0");
+		var cl_wid, cl_wid2;
+
+		init_eng_dict();
+
+		var max_length = new Array(1000);
+		var max_word   = new Array(1000);
+		var i;
+		for (i = 0; i< max_length.length; i++)
+		{
+			max_length[i] = 0;
+			max_word[i] = "";
+		}
+
+		for (i = 0; i< dictionary.length; i++)
+		{
+			my_cell.innerHTML = "<span id=\"wordlentest\">" + dictionary[i] + "</span>";
+			cl_wid  = document.getElementById("wordlentest").offsetWidth;
+
+			if (cl_wid > max_length[ dictionary[i].length ])
+			{
+				max_length[ dictionary[i].length ] = cl_wid;
+				max_word[dictionary[i].length] = dictionary[i];
+			}
+		}
+
+		var out = "";		
+
+		for (i = 0; i< 100; i++)
+		{
+			out += i.toString() + "\t" + max_length[i] + "\t" + max_word[i] + "\n";
+		}
+
+		alert(out);
+	}
+	*/
+
 
 </script>
 
