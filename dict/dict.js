@@ -231,6 +231,26 @@ function number_of_characters_to_show(a, b)
 	return i;
 }
 
+function is_rectangle_empty(k_cols, k_rows, k_num, row_start, col_start) 
+{
+	// function returns, whether or not the rectangle starting from row_start and col_start
+	// would be empty, on a grid of size (k_cols x k_rows) filled with (k_num) entities
+	//
+	// row_start and col_start are indexed from 0
+	// k_num starts from 1
+	//
+	// it goes:
+	//      1          2          3          ...          k_cols
+	// (k_cols+1)  (k_cols+2)  (k_cols+3)    ...	      k_cols*2
+	// ...
+	// ...	k_num ...
+	// ...
+
+	var lowest_position = 1 + col_start + row_start*k_cols;
+	return (lowest_position > k_num);
+	
+}
+
 
 function get_tree_position(key_index, k_cols, k_rows, k_num)
 {
@@ -278,8 +298,14 @@ function get_tree_position(key_index, k_cols, k_rows, k_num)
 
 //	alert (number_of_characters_to_show("\u0431\u043B\u0435\u0430\u0442\u044C", "\u0411\u041B\u042F\u0414\u042C!"));
 
-	var div_k_cols = get_value_from_factors_2_3(k_cols_factors);
-	var div_k_rows = get_value_from_factors_2_3(k_rows_factors);
+	var new_k_cols = get_value_from_factors_2_3(k_cols_factors);
+	var new_k_rows = get_value_from_factors_2_3(k_rows_factors);
+
+	var div_k_cols = new_k_cols;
+	var div_k_rows = new_k_rows;
+
+
+	// my grid is now of size (new_k_cols x new_k_rows)
 
 	var div_a_cols = k_col_num, div_a_rows = k_row_num;
 	var rem_a_cols = 0,         rem_a_rows = 0;
@@ -288,6 +314,8 @@ function get_tree_position(key_index, k_cols, k_rows, k_num)
 	var new_trit = 0, new_trit_value = 0;
 	var tree_value = 0;
 
+	var col_start = 0, row_start = 0;
+	var col_shift, row_shift;
 //	alert(div_k_cols);
 //	alert(div_k_rows);
 
@@ -298,73 +326,37 @@ function get_tree_position(key_index, k_cols, k_rows, k_num)
 
 
 	// key_index starts with 1
-	var last_used_column = (k_num - 1) % k_cols;
-	if (last_used_column >= div_k_cols)
-	{
-		first_unused_column = div_k_cols - 1;
-	}
-
-	var div_last_used_column = last_used_column, rem_last_used_column = 0, new_trit_value_for_last_used_column = 0;
-	
-	var last_used_row = Math.ceil(k_num / k_cols) - 1;
-	var div_last_used_row    = last_used_row   , rem_last_used_row    = 0, new_trit_value_for_last_used_row    = 0;
-
-
-	var col_coincide = 1;
-	var col_fall_behind = 0;
 
 	while(div_k_cols > 1 || div_k_rows > 1)
 	{
 		new_trit = 0;
 		if (direction == "cols")
 		{
+			// factor - 2 is indexing; factor could be 2 or 3, so I get index of 0 or 1
 			if (k_cols_factors[factor - 2] != 0)
 			{
 //				alert('here1');
 				k_cols_factors[factor - 2] --;
 				div_k_cols /= factor;
+
 				rem_a_cols =  div_a_cols % div_k_cols;
+				col_shift =  (div_a_cols - rem_a_cols);
+
 				div_a_cols = (div_a_cols - rem_a_cols) / div_k_cols;
 				new_trit = 1;
 				new_trit_value = div_a_cols;
 				div_a_cols = rem_a_cols;
 
-				// possibly need to skip one step
-				// I calculate tree positions for the last used table cell, too
-				// and if "my" table cell ends up in the same branch as the last used cell,
-				// then there's no real choice, so I just need to skip that step
-				rem_last_used_column =  div_last_used_column % div_k_cols;
-				div_last_used_column = (div_last_used_column - rem_last_used_column) / div_k_cols;
-				new_trit_value_for_last_used_column = div_last_used_column;
-				div_last_used_column = rem_last_used_column;
+				// may be I need to skip one step here
+				// <x>  <x>  <x>  < >  < >  < >  < >  < >  < >
 
-				if (new_trit_value_for_last_used_column != new_trit_value)
+				if (is_rectangle_empty(new_k_cols, new_k_rows, k_num, row_start, col_start + div_k_cols))
 				{
-					col_coincide = 0;
-				}
-
-				if (new_trit_value_for_last_used_column < new_trit_value)
-				{
-					col_fall_behind = 1;
-				}
-
-				if ( (k_row_num == last_used_row) && (new_trit_value == 0) && (new_trit_value_for_last_used_column == 0) 
-				     && (col_coincide == 1) && (div_k_rows == 1) )
-				{
-					/*
-					alert('get_tree_position, skip condition,\nkey_index = ' + key_index.toString() + 
-					      ', k_cols = ' + k_cols.toString() + ', k_rows = ' + 
-					      k_rows.toString() + ', k_num = ' + k_num.toString() + 
-					      ',\nlast_used_row = ' + last_used_row.toString() + 
-					      ', last_used_column = ' + last_used_column.toString() +
-					      ',\nk_col_num = ' + k_col_num.toString() +
-					      ', k_row_num = ' + k_row_num.toString() + 
-					      ',\n div_k_cols = ' + div_k_cols.toString());
-					*/
-
 					// cancel branching at this point
 					new_trit = 0;
 				}
+
+				col_start += col_shift;			// col position of the current rectangle upper left corner
 
 			}
 			direction = "rows";
@@ -376,26 +368,27 @@ function get_tree_position(key_index, k_cols, k_rows, k_num)
 //				alert('here2');
 				k_rows_factors[factor - 2] --;
 				div_k_rows /= factor;
+
 				rem_a_rows =  div_a_rows % div_k_rows;
+				row_shift =  (div_a_rows - rem_a_rows);
+
 				div_a_rows = (div_a_rows - rem_a_rows) / div_k_rows;
 				new_trit = 1;
 				new_trit_value = div_a_rows;
 				div_a_rows = rem_a_rows;
 
-				// possibly need to skip one step here, either
-				rem_last_used_row =  div_last_used_row % div_k_rows;
-				div_last_used_row = (div_last_used_row - rem_last_used_row) / div_k_rows;
-				new_trit_value_for_last_used_row = div_last_used_row;
-				div_last_used_row = rem_last_used_row;
+				// may be I need to skip one step here
+				// <x>  <x>
+				// < >  < >
+				// < >  < >
 
-				if ( (k_row_num == last_used_row - 1) && (new_trit_value == 0) && (new_trit_value_for_last_used_row > 0) 
-				     && (col_fall_behind == 1) )
+				if (is_rectangle_empty(new_k_cols, new_k_rows, k_num, row_start + div_k_rows, col_start))
 				{
 					// cancel branching at this point
 					new_trit = 0;
 				}
 
-
+				row_start += row_shift;			// row position of the current rectangle upper left corner
 			}
 
 			factor = 5 - factor;
@@ -742,6 +735,7 @@ function realize_dict(key_index, lang)
 			}
 
 //			caption = tree_pos.toString(3);
+//			caption = "0".repeat(num_bits - caption.length) + caption;
 
 			button_list[bll] = new Kbd_Button(key_cap, null, tree_pos, null, null, caption, caption, realize_dict_wrapper, realize_dict_wrapper, args, args);
 		}
@@ -878,6 +872,9 @@ function realize_cued_dict(lang)
 	dictionary = new Array();
 	var cond1, cond2, cond3;
 	var start_compar = start_of_the_word.toLowerCase(), end_compar = end_of_the_word.toLowerCase();
+	var max_letters_in_a_word = 0;
+	var longest_word = "";
+	var max_columns_for_last_page = 0;
 	
 	for (i = 0; i < entire_dict.length; i++)
 	{
@@ -891,6 +888,12 @@ function realize_cued_dict(lang)
 		if ( cond1 && cond2 && cond3 )
 		{
 			dictionary[dictionary.length] = entire_dict[i];
+
+			if (entire_dict[i].length > max_letters_in_a_word)
+			{
+				max_letters_in_a_word = entire_dict[i].length;
+				longest_word = entire_dict[i];
+			}
 		}
 	}
 
@@ -903,9 +906,31 @@ function realize_cued_dict(lang)
 		return;
 	}
 
+
 	// possible options for organizing a dictionary entry
 	var options_cols    = new Array(6, 4, 3, 2, 1);
 	var options_entries = [], rows = 4;
+
+	// determining possible number of columns for the last page
+	var letters_per_column_number = [], allowed_last_page_cols_option = 0;
+	if (lang == "rus")
+	{
+		letters_per_column_number = max_displayed_word_size_per_number_of_columns_rus.slice();
+	}
+	else
+	{
+		letters_per_column_number = max_displayed_word_size_per_number_of_columns_eng.slice();
+	}
+
+	for (i = 0; i < options_cols.length; i++)
+	{
+		if (max_letters_in_a_word <= letters_per_column_number[options_cols[i] - 1])
+		{
+			allowed_last_page_cols_option = i;
+			break;
+		}
+	}
+		
 
 	for (i = 0; i < options_cols.length; i++)
 	{
@@ -926,22 +951,43 @@ function realize_cued_dict(lang)
 	// define dictionary pages
 	max_toc_levels = 1;
 	var i_rem, i_dig;
+
+	var list_of_options = Array(max_pages), search_space = 1, list_of_shifts = Array(max_pages);
+
 	const big_value = 1000000;
 	for (k = 0; k < max_pages; k++)
 	{
 		best_match = big_value;
 		current_take = new Array(k + 1);
-		for (i = 0; i < options_cols.length ** (k + 1); i++)
+
+		// workaround to allow only "allowed_last_page_cols_option" or a greater extent of a diminishing amount of columns for the lass page
+		search_space = 1;
+		for (i = 0; i < k + 1; i++)
+		{
+			if (i == 0)
+			{
+				list_of_options[i] = options_cols.length - allowed_last_page_cols_option;
+			}
+			else
+			{
+				list_of_options[i] = options_cols.length;
+			}
+			search_space *= list_of_options[i];
+			list_of_shifts[i] = options_cols.length - list_of_options[i];
+		}
+
+
+		for (i = 0; i < search_space; i++)
 		{
 			i_rem = i;
 			current_num = 1;
 			current_match = 0;
 			for (j = 0; j <= k; j++)
 			{
-				i_dig = i_rem % options_cols.length;
-				i_rem = (i_rem - i_dig) / options_cols.length;
+				i_dig = i_rem % list_of_options[j];
+				i_rem = (i_rem - i_dig) / list_of_options[j];
 				current_take[k - j] = i_dig;
-				current_num *= options_entries[i_dig];
+				current_num *= options_entries[list_of_shifts[j] + i_dig];
 			}
 			current_match = current_num - dictionary.length;
 
@@ -960,7 +1006,18 @@ function realize_cued_dict(lang)
 
 	}
 
+	// convert to options_cols indices
+	for (i = 0; i< max_toc_levels; i++)
+	{
+		best_match_array[i] += list_of_shifts[i];
+	}
+
+
+//	alert('allowed_last_page_cols_option = ' + allowed_last_page_cols_option.toString() + ', max_letters_in_a_word = ' + max_letters_in_a_word.toString() + 
+//	      '\n, longest_word = \"' + longest_word + '\"');
 //	alert('best_match = ' + best_match.toString() + ', array = ' + best_match_array);
+
+
 	dict_columns = [];
 	toc_choice = [];
 	toc_shift = [];
@@ -982,6 +1039,7 @@ function realize_cued_dict(lang)
 //	toc_choice = [0];
 
 //	toc_shift = [1];
+
 
 	// do not shorten displayed words in ranges
 	is_cued_dictionary = 1;
