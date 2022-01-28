@@ -86,10 +86,10 @@ Third, the 6 keys in the bottom-right allow you to work with selections. The key
 
 * * *
 
-The link to the software, version 1.00 (default Russian layout):
+The link to the software, version 1.01 (default Russian layout):
 
-https://rawcdn.githack.com/jizzi/keyboard/9dcbb987dbe4415d3c45acf814a7a105924561c9/keyboard.html
+https://rawcdn.githack.com/jizzi/keyboard/35e6e1e0dcd56fdc5bec84fb0b4e1378d09feefa/keyboard.html
 
 Same, with default English layout:
 
-https://rawcdn.githack.com/jizzi/keyboard/9dcbb987dbe4415d3c45acf814a7a105924561c9/keyboard_eng.html
+https://rawcdn.githack.com/jizzi/keyboard/35e6e1e0dcd56fdc5bec84fb0b4e1378d09feefa/keyboard_eng.html
