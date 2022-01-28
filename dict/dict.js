@@ -1009,7 +1009,7 @@ function realize_cued_dict(lang)
 	// convert to options_cols indices
 	for (i = 0; i< max_toc_levels; i++)
 	{
-		best_match_array[i] += list_of_shifts[i];
+		best_match_array[i] += list_of_shifts[max_toc_levels - i - 1];
 	}
 
 
