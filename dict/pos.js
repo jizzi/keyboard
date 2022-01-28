@@ -837,11 +837,8 @@ function interface_for_pasting_data(lang)
 	var mycell = document.getElementById("Key_1_0");
 	mycell.innerHTML = "<textarea id=\"area_for_pasting_data\" name=\"story\" rows=\"2\" cols=\"70\">";
 	mycell.style.backgroundColor = color_keyboard;
-
-
-
-	
 }
+
 
 function retrieve_pasted_data(args)
 {

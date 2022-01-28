@@ -17,6 +17,13 @@ var toc_choice = new Array();
 var toc_shift = new Array();
 
 // --------------
+//
+var   is_cued_dictionary = 0;
+
+//                                                        [ 1,  2,  3,  4,  5,  6,  7,  8,  9];
+const max_displayed_word_size_per_number_of_columns_eng = [62, 45, 40, 24, 18, 13, 10,  7,  6];
+const max_displayed_word_size_per_number_of_columns_rus = [62, 40, 30, 23, 16, 13, 10,  8,  7];
+//const max_displayed_word_size_per_number_of_columns   = [62, 30, 19, 14, 10,  8,  7,  6,  5];
 
 var current_dictionary_level = 0;
 
@@ -27,40 +34,95 @@ const up_one_level_narrow = "\u3014<b>\u21e7</b>\u3015";
 const max_cols_for_full_caption = 6;		
 
 
-var max_chars_to_show = 8;	// don't display long dash if caption length exceeds this value, for 1st level of TOC
+//var max_chars_to_show = 8;	// don't display long dash if caption length exceeds this value, for 1st level of TOC
 
-
-function start_rus_dict()
+function start_any_dict(lang)
 {
-	// simple wrapper
-	current_interface = "dict1";
-	current_dictionary_level = 0;
-	realize_dict(0, "rus");
+	// start normal dictionary, or propose to choose between normal and cued dictionaries
+
+	if (lang != "rus" && lang != "eng")
+	{
+		alert ('start_any_dict: unknown language ' + lang);
+		return;
+	}
+	
+	var last_word;
+
+	last_word = get_last_word(0);		// don't change selection
+
+	if (last_word == "")
+	{
+		// start normal dictionary
+		current_dictionary_level = 0;
+		realize_dict(0, lang);
+	}
+	else
+	{
+
+		current_interface = "dict_any";
+
+		// can be called from pos interface...
+		table_spans = [	30,  0,	 30, 0, 30, 0, 30, 0];
+
+		generate_table();
+
+		let invitation = "", cap_button_exit = "", cap_button_norm = "", cap_button_cued = "";
+
+		if (lang == "eng")
+		{
+			invitation = "Choose between a normal and a cued dictionary:";
+			cap_button_exit = "Exit";
+			cap_button_norm = "Normal";
+			cap_button_cued = "Cued";
+		}
+		else
+		{
+			invitation = "\u0412\u044B\u0431\u0435\u0440\u0438\u0442\u0435 \u043E\u0431\u044B\u0447\u043D\u044B\u0439 \u0438\u043B\u0438 \u0434\u043E\u043F\u043E\u043B\u043D\u044F\u044E\u0449\u0438\u0439 \u0441\u043B\u043E\u0432\u0430\u0440\u044C:";
+			cap_button_exit = "\u0412\u044B\u0445\u043E\u0434";
+			cap_button_norm = "\u041E\u0431\u044B\u0447\u043D\u044B\u0439";
+			cap_button_cued = "\u0414\u043E\u043F\u043E\u043B\u043D\u044F\u044E\u0449\u0438\u0439";
+		}
+
+
+		// generate alternative interface now
+		button_list = [
+		    new Kbd_Button("Key_0_0", null, tri('1        '), null, null, invitation,      invitation,      null, null),
+		    new Kbd_Button("Key_1_0", null, tri(' 0       '), null, null, cap_button_exit, cap_button_exit, realize_normal_keyboard, realize_normal_keyboard, lang, lang),
+		    new Kbd_Button("Key_2_0", null, tri(' 1       '), null, null, cap_button_norm, cap_button_norm, start_normal_dict,       start_normal_dict,       lang, lang),
+		    new Kbd_Button("Key_3_0", null, tri(' 2       '), null, null, cap_button_cued, cap_button_cued, realize_cued_dict,       realize_cued_dict,       lang, lang)
+		    ];
+
+	}
 }
 
-function start_eng_dict()
+
+function start_normal_dict(lang)
 {
-	// another simple wrapper
-	current_interface = "dict1";
+	// wrapper
+	if (lang != "rus" && lang != "eng")
+	{
+		alert ('start_normal_dict: unknown language ' + lang);
+		return;
+	}
+
 	current_dictionary_level = 0;
-	realize_dict(0, "eng");
+
+	realize_dict(0, lang);
 }
 
-
+/*
 function start_cued_rus_dict()
 {
 	// simple wrapper
-	current_interface = "dict2";
 	realize_cued_dict("rus");
 }
 
 function start_cued_eng_dict()
 {
 	// another simple wrapper
-	current_interface = "dict2";
 	realize_cued_dict("eng");
 }
-
+*/
 
 
 
@@ -382,10 +444,15 @@ function type_chosen_word(current_word, lang)
 }
 
 
+
 function realize_dict_wrapper(args)
 {
+	// helper function, used by realize_dict to make recursive calls,
+	// and also called from dictionary selection mode
 	realize_dict(args[0], args[1]);
 }
+
+
 
 function realize_dict(key_index, lang)
 {  
@@ -413,6 +480,9 @@ function realize_dict(key_index, lang)
 
 	if (current_dictionary_level == 0)
 	{
+		is_cued_dictionary = 0;
+		current_interface = "dict_normal";
+
 		if (lang == "rus")
 		{
 			// defined in "dict_rus.js"
@@ -638,18 +708,30 @@ function realize_dict(key_index, lang)
 			
 			chars_to_show2 = number_of_characters_to_show(word2, word2_prev);
 
+			// var   is_cued_dictionary = 0;
+			// const max_displayed_word_size_per_number_of_columns = [];
+
+
+			if (is_cued_dictionary != 0)
+			{
+				// excessive shortening may be confusing in this mode
+				if (lang == "rus")
+				{
+					chars_to_show1 = Math.max(chars_to_show1, max_displayed_word_size_per_number_of_columns_rus[k_cols - 1]);
+					chars_to_show2 = Math.max(chars_to_show2, max_displayed_word_size_per_number_of_columns_rus[k_cols - 1]);
+				}
+				else
+				{
+					chars_to_show1 = Math.max(chars_to_show1, max_displayed_word_size_per_number_of_columns_eng[k_cols - 1]);
+					chars_to_show2 = Math.max(chars_to_show2, max_displayed_word_size_per_number_of_columns_eng[k_cols - 1]);
+				}
+			}
+
+
 			if (word2_ind - word1_ind > 1)
 			{
 				caption = word1.substring(0, chars_to_show1);
-				if (chars_to_show1 <= max_chars_to_show || current_dictionary_level > 1 || dtoc.length == 0)
-				{
-					caption += ' \u2013 ';
-				}
-				caption += '<br/>';
-				if (chars_to_show2 <= max_chars_to_show || current_dictionary_level > 1 || dtoc.length == 0)
-				{
-					caption += ' \u2013 ';
-				}
+				caption += ' \u2013<br/>\u2013 ';
 				caption += word2_prev.substring(0, chars_to_show2);
 
 				caption = caption.toLowerCase();
@@ -754,7 +836,8 @@ function realize_cued_dict(lang)
 
 	if (start_of_the_word == "" && end_of_the_word == "")
 	{
-		// do nothing
+		// return to normal keyboard
+		realize_normal_keyboard(lang);
 		return;
 	}
 
@@ -815,6 +898,8 @@ function realize_cued_dict(lang)
 
 	if (dictionary.length == 0)
 	{
+		// return to normal keyboard
+		realize_normal_keyboard(lang);
 		return;
 	}
 
@@ -898,6 +983,9 @@ function realize_cued_dict(lang)
 
 //	toc_shift = [1];
 
+	// do not shorten displayed words in ranges
+	is_cued_dictionary = 1;
+	current_interface = "dict_cued";
 
 	current_dictionary_level = 2;
 
