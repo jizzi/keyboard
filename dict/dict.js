@@ -21,8 +21,8 @@ var toc_shift = new Array();
 var   is_cued_dictionary = 0;
 
 //                                                        [ 1,  2,  3,  4,  5,  6,  7,  8,  9];
-const max_displayed_word_size_per_number_of_columns_eng = [62, 45, 40, 24, 18, 13, 10,  7,  6];
-const max_displayed_word_size_per_number_of_columns_rus = [62, 40, 30, 23, 16, 13, 10,  8,  7];
+const max_displayed_word_size_per_number_of_columns_eng = [60, 37, 33, 20, 15, 11,  9,  6,  5];
+const max_displayed_word_size_per_number_of_columns_rus = [60, 33, 25, 19, 13, 11,  9,  7,  6];
 //const max_displayed_word_size_per_number_of_columns   = [62, 30, 19, 14, 10,  8,  7,  6,  5];
 
 var current_dictionary_level = 0;
@@ -623,7 +623,8 @@ function realize_dict(key_index, lang)
 
 //	alert('key_num == ' + key_num.toString());
 
-	if (key_num == 1)
+	// end of search condition
+	if (key_num == 1 && current_dictionary_level > max_toc_levels)
 	{
 		type_chosen_word(dictionary[word_index], lang);
 
@@ -946,7 +947,7 @@ function realize_cued_dict(lang)
 	toc_shift = [];
 
 	var best_match, best_match_array = [];
-	var current_take, current_num, current_match;
+	var current_take, current_number_of_entries, current_match;
 
 	// define dictionary pages
 	max_toc_levels = 1;
@@ -980,16 +981,16 @@ function realize_cued_dict(lang)
 		for (i = 0; i < search_space; i++)
 		{
 			i_rem = i;
-			current_num = 1;
+			current_number_of_entries = 1;
 			current_match = 0;
 			for (j = 0; j <= k; j++)
 			{
 				i_dig = i_rem % list_of_options[j];
 				i_rem = (i_rem - i_dig) / list_of_options[j];
 				current_take[k - j] = i_dig;
-				current_num *= options_entries[list_of_shifts[j] + i_dig];
+				current_number_of_entries *= options_entries[list_of_shifts[j] + i_dig];
 			}
-			current_match = current_num - dictionary.length;
+			current_match = current_number_of_entries - dictionary.length;
 
 			if (current_match >= 0 && current_match < best_match)
 			{
@@ -1009,7 +1010,7 @@ function realize_cued_dict(lang)
 	// convert to options_cols indices
 	for (i = 0; i< max_toc_levels; i++)
 	{
-		best_match_array[i] += list_of_shifts[max_toc_levels - i - 1];
+		best_match_array[i] += list_of_shifts[max_toc_levels - 1 - i];
 	}
 
 
@@ -1034,12 +1035,8 @@ function realize_cued_dict(lang)
 	}
 
 
-//	dict_columns = [4];
-
-//	toc_choice = [0];
-
-//	toc_shift = [1];
-
+//	alert('max_toc_levels = ' + max_toc_levels.toString() + ', dict_columns = ' + dict_columns.slice(0, max_toc_levels) + ', ' + 
+//	      'toc_shift = ' + toc_shift.slice(0, max_toc_levels) + ', dict_length = ' + dictionary.length.toString());
 
 	// do not shorten displayed words in ranges
 	is_cued_dictionary = 1;
