@@ -74,9 +74,9 @@ If you type "0" instead of a positive number, the number of letters is ignored. 
 
 Another example, "0", "o", "word", "Cued" will get you the words of any length, ending with "o".
 
-*A note to Anima. Please, keep in mind that Egos are dumb. Human dictionaries are poor compared to your vocabulary. Use this option only to convey a simple concept. Like if you were talking to a 5 years old, rather than a peer.
+*A note to Anima. Please, keep in mind that Egos are dumb. Human dictionaries are poor compared to your vocabulary. Use this option only to convey a simple concept. Like if you were talking to a 5 years old, rather than a peer.*
 
-A note to Animus. Have fun! ^_^*
+*A note to Animus. Have fun! ^_^*
 
 4.
 
