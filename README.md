@@ -74,6 +74,8 @@ If you type "0" instead of a positive number, the number of letters is ignored. 
 
 Another example, "0", "o", "word", "Cued" will get you the words of any length, ending with "o".
 
+*A note to Anima/Animus. Please, keep in mind that Egos are dumb. Human dictionaries are poor compared to your vocabulary. Use this option only to convey a very simple concept. Like if you were talking to a 5 years old, rather than a peer.*
+
 4.
 
 "**pos**" allows you to edit the text. In principle, you can already move the cursor using the arrow keys ("left" and "right" keys on the main keyboard, which become "up" and "down" keys if you press "SHIFT"), as well as remove text using "BKSP" key (which becomes "DEL" when you press shift). What does the "pos" feature allow you to do? If you choose it, you can see it consists roughly of three parts.
